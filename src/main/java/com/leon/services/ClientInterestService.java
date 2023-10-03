@@ -1,14 +1,20 @@
 package com.leon.services;
 
+import com.leon.models.ClientInterest;
+
+import java.util.List;
+
 public interface ClientInterestService
 {
     void reconfigure();
 
-    void getAll();
+    List<ClientInterest> getAll();
 
-    void delete();
+    List<ClientInterest> getAllByClientId(String clientId);
 
-    void save();
+    void delete(String interestId);
 
-    void update();
+    ClientInterest save(ClientInterest clientInterestToSave);
+
+    ClientInterest update(ClientInterest clientInterestToUpdate);
 }

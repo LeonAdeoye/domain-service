@@ -1,10 +1,16 @@
 package com.leon.services;
 
+import com.leon.models.Client;
+
+import java.util.List;
+
 public interface ClientService
 {
     void reconfigure();
 
-    void delete();
+    void delete(String clientId);
 
-    void getAll();
+    List<Client> getAll();
+
+    Client save(Client clientToSave);
 }

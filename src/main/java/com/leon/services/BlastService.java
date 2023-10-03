@@ -1,14 +1,18 @@
 package com.leon.services;
 
+import com.leon.models.Blast;
+
+import java.util.List;
+
 public interface BlastService
 {
     void reconfigure();
 
-    void saveBlast();
+    Blast saveBlast(Blast blastToSave);
 
-    void deleteBlast();
+    void deleteBlast(String blastId);
 
-    void updateBlast();
+    Blast updateBlast(Blast blastToUpdate);
 
-    void getBlasts();
+    List<Blast> getBlasts();
 }

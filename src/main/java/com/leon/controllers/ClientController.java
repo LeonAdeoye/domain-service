@@ -1,12 +1,11 @@
 package com.leon.controllers;
 
+import com.leon.models.Client;
 import com.leon.services.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -28,10 +27,25 @@ public class ClientController
 
     @CrossOrigin
     @RequestMapping(value="/", method=DELETE)
-    public void delete()
+    public void delete(@RequestParam String clientId)
     {
-        logger.info("Received request to delete client.");
-        this.clientService.delete();
+        if(clientId == null || clientId.isEmpty())
+            throw new IllegalArgumentException("clientId is null or empty.");
+
+        logger.info("Received request to delete client with Id: {}.", clientId);
+        this.clientService.delete(clientId);
+    }
+
+    public Client save(@RequestBody Client clientToSave)
+    {
+        if(clientToSave == null)
+        {
+            logger.error("Received request to save client but client is null.");
+            return null;
+        }
+
+        logger.info("Received request to save client: {}.", clientToSave.toString());
+        return this.clientService.save(clientToSave);
     }
 
     @CrossOrigin

@@ -14,17 +14,45 @@ public class ClientInterest
         SELL
     }
 
-    private int clientId;
+    private String clientId;
     private String notes;
     private Side side;
     private String symbol;
+    private String clientInterestId;
 
-    public int getClientId()
+    public ClientInterest()
+    {
+        clientInterestId = "";
+        clientId = "";
+        notes = "";
+        side = Side.BUY;
+        symbol = "";
+    }
+
+    public ClientInterest(String clientId, String notes, Side side, String symbol)
+    {
+        this.clientId = clientId;
+        this.notes = notes;
+        this.side = side;
+        this.symbol = symbol;
+    }
+
+    public String getClientInterestId()
+    {
+        return clientInterestId;
+    }
+
+    public void setClientInterestId(String clientInterestId)
+    {
+        this.clientInterestId = clientInterestId;
+    }
+
+    public String getClientId()
     {
         return clientId;
     }
 
-    public void setClientId(int clientId)
+    public void setClientId(String clientId)
     {
         this.clientId = clientId;
     }
@@ -64,10 +92,10 @@ public class ClientInterest
     {
         return "ClientInterest{" +
                 "clientId=" + clientId +
-                ", notes='" + notes + '\'' +
+                ", notes=" + notes +
                 ", side=" + side +
-                ", symbol='" + symbol + '\'' +
-                '}';
+                ", clientInterestId=" + clientInterestId +
+                ", symbol=" + symbol + "}";
     }
 
     @Override
@@ -76,11 +104,11 @@ public class ClientInterest
         if (this == o) return true;
         if (!(o instanceof ClientInterest)) return false;
         ClientInterest that = (ClientInterest) o;
-        return clientId == that.clientId && notes.equals(that.notes) && side == that.side && symbol.equals(that.symbol);
+        return clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && symbol.equals(that.symbol);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, notes, side, symbol);
+        return Objects.hash(clientId, notes, side, symbol, clientInterestId);
     }
 }
