@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class ClientInterestServiceImpl implements ClientInterestService
 {
     private static final Logger logger = LoggerFactory.getLogger(ClientInterestServiceImpl.class);
-    private Map<String, ClientInterest> clientInterestMap = new HashMap<>();
+    private Map<String, List<ClientInterest>> clientInterestMap = new HashMap<>();
     @Autowired
     private ClientInterestRepository clientInterestRepository;
 
@@ -24,7 +25,13 @@ public class ClientInterestServiceImpl implements ClientInterestService
     public void initialize()
     {
         List<ClientInterest> result = clientInterestRepository.findAll();
-        result.forEach(clientInterest -> clientInterestMap.put(clientInterest.getClientInterestId(), clientInterest));
+        result.forEach(clientInterest ->
+        {
+            if(!clientInterestMap.containsKey(clientInterest.getOwnerId()))
+                clientInterestMap.put(clientInterest.getOwnerId(), new ArrayList<>());
+            List<ClientInterest> interests = clientInterestMap.get(clientInterest.getOwnerId());
+            interests.add(clientInterest);
+        });
         logger.info("Loaded client interest service with {} client interest(s).", result.size());
     }
 
@@ -36,29 +43,34 @@ public class ClientInterestServiceImpl implements ClientInterestService
     }
 
     @Override
-    public List<ClientInterest> getAll()
+    public List<ClientInterest> getAll(String ownerId)
     {
-        return clientInterestMap.values().stream().collect(Collectors.toList());
+        return clientInterestMap.get(ownerId);
     }
 
     @Override
-    public List<ClientInterest> getAllByClientId(String clientId)
+    public List<ClientInterest> getAllByClientId(String ownerId, String clientId)
     {
-        return clientInterestMap.values().stream().filter(clientInterest -> clientInterest.getClientId().equals(clientId)).collect(Collectors.toList());
+        List<ClientInterest> interests = clientInterestMap.get(ownerId);
+        return interests.stream().filter(clientInterest -> clientInterest.getClientId().equals(clientId)).collect(Collectors.toList());
     }
 
     @Override
-    public void delete(String clientInterestId)
+    public void delete(String ownerId, String clientInterestId)
     {
         clientInterestRepository.deleteById(clientInterestId);
-        clientInterestMap.remove(clientInterestId);
+        List<ClientInterest> interests = clientInterestMap.get(ownerId);
+        interests.removeIf(clientInterest -> clientInterest.getClientInterestId().equals(clientInterestId));
     }
 
     @Override
     public ClientInterest save(ClientInterest clientInterestToSave)
     {
         ClientInterest result = clientInterestRepository.save(clientInterestToSave);
-        clientInterestMap.put(result.getClientInterestId(), result);
+        if(!clientInterestMap.containsKey(clientInterestToSave.getOwnerId()))
+            clientInterestMap.put(result.getOwnerId(), new ArrayList<>());
+        List<ClientInterest> interests = clientInterestMap.get(result.getOwnerId());
+        interests.add(result);
         return result;
     }
 
@@ -66,7 +78,9 @@ public class ClientInterestServiceImpl implements ClientInterestService
     public ClientInterest update(ClientInterest clientInterestToUpdate)
     {
         ClientInterest result = clientInterestRepository.save(clientInterestToUpdate);
-        clientInterestMap.put(result.getClientInterestId(), result);
+        List<ClientInterest> interests = clientInterestMap.get(clientInterestToUpdate.getOwnerId());
+        interests.removeIf(clientInterest -> clientInterest.getClientInterestId().equals(result.getClientInterestId()));
+        interests.add(result);
         return result;
     }
 }

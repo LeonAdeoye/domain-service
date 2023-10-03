@@ -29,16 +29,28 @@ public class ClientInterestController
     }
     @CrossOrigin
     @RequestMapping(method=GET, produces = "application/json")
-    public ResponseEntity<List<ClientInterest>> getAll()
+    public ResponseEntity<List<ClientInterest>> getAll(@RequestParam String ownerId)
     {
-        logger.info("Received request to get all interests.");
-        return new ResponseEntity<>(this.clientInterestService.getAll(), HttpStatus.OK);
+        if(ownerId == null || ownerId.isEmpty())
+        {
+            logger.error("Received request to get all client interests but owner Id was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Received request to get all interests for owner Id: {}", ownerId);
+        return new ResponseEntity<>(this.clientInterestService.getAll(ownerId), HttpStatus.OK);
     }
 
     @CrossOrigin
     @RequestMapping(value="/{clientId}", method=GET, produces = "application/json")
-    public ResponseEntity<List<ClientInterest>> getAllByClientId(@RequestParam String clientId)
+    public ResponseEntity<List<ClientInterest>> getAllByClientId(@RequestParam String ownerId, @RequestParam String clientId)
     {
+        if(ownerId == null || ownerId.isEmpty())
+        {
+            logger.error("Received request to get all client interests for and owner and client but owner Id was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         if(clientId == null || clientId.isEmpty())
         {
             logger.error("Received request to get all interests for a client but the client Id was null or empty.");
@@ -46,12 +58,12 @@ public class ClientInterestController
         }
 
         logger.info("Received request to get interests for a client with Id: {}.", clientId);
-        return new ResponseEntity<>(this.clientInterestService.getAllByClientId(clientId), HttpStatus.OK);
+        return new ResponseEntity<>(this.clientInterestService.getAllByClientId(ownerId, clientId), HttpStatus.OK);
     }
 
     @CrossOrigin
     @RequestMapping(method=DELETE)
-    public ResponseEntity<Void> delete(@RequestParam String clientInterestId)
+    public ResponseEntity<Void> delete(@RequestParam String ownerId, @RequestParam String clientInterestId)
     {
         if(clientInterestId == null || clientInterestId.isEmpty())
         {
@@ -59,8 +71,14 @@ public class ClientInterestController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        logger.info("Received request to delete interest with Id: {}.", clientInterestId);
-        this.clientInterestService.delete(clientInterestId);
+        if(ownerId == null || ownerId.isEmpty())
+        {
+            logger.error("Received request to delete client interest but owner Id was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Received request to delete interest with owner Id: {} and client interest Id: {}.", ownerId, clientInterestId);
+        this.clientInterestService.delete(ownerId, clientInterestId);
         return ResponseEntity.noContent().build();
     }
 

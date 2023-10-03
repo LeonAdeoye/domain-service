@@ -21,18 +21,21 @@ public class ClientInterest
     private String notes;
     private Side side;
     private String symbol;
+    private String ownerId;
 
     public ClientInterest()
     {
         clientId = "";
+        ownerId = "";
         notes = "";
         side = Side.BUY;
         symbol = "";
     }
 
-    public ClientInterest(String clientId, String notes, Side side, String symbol)
+    public ClientInterest(String ownerId, String clientId, String notes, Side side, String symbol)
     {
         this.clientId = clientId;
+        this.ownerId = ownerId;
         this.notes = notes;
         this.side = side;
         this.symbol = symbol;
@@ -88,6 +91,16 @@ public class ClientInterest
         this.symbol = symbol;
     }
 
+    public String getOwnerId()
+    {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId)
+    {
+        this.ownerId = ownerId;
+    }
+
     @Override
     public String toString()
     {
@@ -95,6 +108,7 @@ public class ClientInterest
                 "clientId=" + clientId +
                 ", notes=" + notes +
                 ", side=" + side +
+                ", ownerId=" + ownerId +
                 ", clientInterestId=" + clientInterestId +
                 ", symbol=" + symbol + "}";
     }
@@ -105,11 +119,11 @@ public class ClientInterest
         if (this == o) return true;
         if (!(o instanceof ClientInterest)) return false;
         ClientInterest that = (ClientInterest) o;
-        return clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && symbol.equals(that.symbol);
+        return ownerId.equals(that.ownerId) && clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && symbol.equals(that.symbol);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, notes, side, symbol, clientInterestId);
+        return Objects.hash(ownerId, clientId, notes, side, symbol, clientInterestId);
     }
 }

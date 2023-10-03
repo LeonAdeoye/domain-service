@@ -58,7 +58,7 @@ public class BlastController
 
     @CrossOrigin
     @RequestMapping(method=DELETE)
-    public ResponseEntity<Void> delete(@RequestParam String blastId)
+    public ResponseEntity<Void> delete(@RequestParam String ownerId, @RequestParam String blastId)
     {
         if(blastId == null || blastId.isEmpty())
         {
@@ -66,8 +66,14 @@ public class BlastController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        logger.info("Received request to delete blast with Id: {}.", blastId);
-        this.blastService.deleteBlast(blastId);
+        if(ownerId == null || ownerId.isEmpty())
+        {
+            logger.error("Received INVALID request to delete blast but owner Id was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Received request to delete blast with owner Id: {} and blast Id: {}", ownerId, blastId);
+        this.blastService.deleteBlast(ownerId, blastId);
         return ResponseEntity.noContent().build();
     }
 
@@ -101,9 +107,15 @@ public class BlastController
 
     @CrossOrigin
     @RequestMapping(method=GET, produces = "application/json")
-    public ResponseEntity<List<Blast>> getAll()
+    public ResponseEntity<List<Blast>> getAll(@RequestParam String ownerId)
     {
-        logger.info("Received request to get all blasts.");
-        return new ResponseEntity<>(this.blastService.getBlasts(), HttpStatus.OK);
+        if(ownerId == null || ownerId.isEmpty())
+        {
+            logger.error("Received INVALID request to get all blast but owner Id was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Received request to get all blasts for owner Id: {}.", ownerId);
+        return new ResponseEntity<>(this.blastService.getBlasts(ownerId), HttpStatus.OK);
     }
 }

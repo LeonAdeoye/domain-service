@@ -10,9 +10,9 @@ public interface BlastService
 
     Blast saveBlast(Blast blastToSave);
 
-    void deleteBlast(String blastId);
+    void deleteBlast(String ownerId, String blastId);
 
     Blast updateBlast(Blast blastToUpdate);
 
-    List<Blast> getBlasts();
+    List<Blast> getBlasts(String ownerId);
 }

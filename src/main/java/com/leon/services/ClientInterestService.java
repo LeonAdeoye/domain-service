@@ -8,11 +8,11 @@ public interface ClientInterestService
 {
     void reconfigure();
 
-    List<ClientInterest> getAll();
+    List<ClientInterest> getAll(String ownerId);
 
-    List<ClientInterest> getAllByClientId(String clientId);
+    List<ClientInterest> getAllByClientId(String ownerId, String clientId);
 
-    void delete(String interestId);
+    void delete(String ownerId, String clientInterestId);
 
     ClientInterest save(ClientInterest clientInterestToSave);
 

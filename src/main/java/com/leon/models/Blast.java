@@ -20,6 +20,7 @@ public class Blast
 
     @Id
     private String blastId;
+    private String ownerId;
     private String blastName;
     private String clientId;
     private List<String> markets;
@@ -32,6 +33,7 @@ public class Blast
     {
         this.blastName = "";
         this.clientId = "";
+        this.ownerId = "";
         this.markets = new ArrayList<>();
         this.contents = new ArrayList<>();
         this.triggerTime = LocalTime.now();
@@ -39,15 +41,26 @@ public class Blast
         this.notionalValueFilter = new HashMap<>();
     }
 
-    public Blast(String blastName, String clientId, List<String> markets, List<ContentType> contents, LocalTime triggerTime, Map<String, Double> advFilter, Map<String, Integer> notionalValueFilter)
+    public Blast(String ownerId, String blastName, String clientId, List<String> markets, List<ContentType> contents, LocalTime triggerTime, Map<String, Double> advFilter, Map<String, Integer> notionalValueFilter)
     {
         this.blastName = blastName;
         this.clientId = clientId;
+        this.ownerId = ownerId;
         this.markets = markets;
         this.contents = contents;
         this.triggerTime = triggerTime;
         this.advFilter = advFilter;
         this.notionalValueFilter = notionalValueFilter;
+    }
+
+    public String getOwnerId()
+    {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId)
+    {
+        this.ownerId = ownerId;
     }
 
     public String getBlastId()
@@ -136,15 +149,16 @@ public class Blast
         if (this == o) return true;
         if (!(o instanceof Blast)) return false;
         Blast blast = (Blast) o;
-        return blastId.equals(blast.blastId) && clientId.equals(blast.clientId) && blastName.equals(blast.blastName) && markets.equals(blast.markets) && contents.equals(blast.contents) && triggerTime.equals(blast.triggerTime) && advFilter.equals(blast.advFilter) && notionalValueFilter.equals(blast.notionalValueFilter);
+        return ownerId.equals(blast.ownerId) && blastId.equals(blast.blastId) && clientId.equals(blast.clientId) && blastName.equals(blast.blastName) && markets.equals(blast.markets) && contents.equals(blast.contents) && triggerTime.equals(blast.triggerTime) && advFilter.equals(blast.advFilter) && notionalValueFilter.equals(blast.notionalValueFilter);
     }
 
     @Override
     public String toString() {
         return "Blast{" +
                 "blastId=" + blastId +
-                ", blastName='" + blastName + '\'' +
+                ", blastName=" + blastName +
                 ", clientId=" + clientId +
+                ", ownerId=" + ownerId +
                 ", markets=" + markets +
                 ", contents=" + contents +
                 ", triggerTime=" + triggerTime +
@@ -156,6 +170,6 @@ public class Blast
     @Override
     public int hashCode()
     {
-        return Objects.hash(blastId, blastName, clientId, markets, contents, triggerTime, advFilter, notionalValueFilter);
+        return Objects.hash(blastId, ownerId, blastName, clientId, markets, contents, triggerTime, advFilter, notionalValueFilter);
     }
 }
