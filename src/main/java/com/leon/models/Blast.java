@@ -36,7 +36,6 @@ public class Blast
         this.ownerId = "";
         this.markets = new ArrayList<>();
         this.contents = new ArrayList<>();
-        this.triggerTime = LocalTime.now();
         this.advFilter = new HashMap<>();
         this.notionalValueFilter = new HashMap<>();
     }
