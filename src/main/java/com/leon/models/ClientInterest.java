@@ -1,6 +1,7 @@
 package com.leon.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Objects;
 
@@ -14,15 +15,15 @@ public class ClientInterest
         SELL
     }
 
+    @Id
+    private String clientInterestId;
     private String clientId;
     private String notes;
     private Side side;
     private String symbol;
-    private String clientInterestId;
 
     public ClientInterest()
     {
-        clientInterestId = "";
         clientId = "";
         notes = "";
         side = Side.BUY;

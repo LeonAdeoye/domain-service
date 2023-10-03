@@ -38,9 +38,9 @@ public class BlastController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(blastToSave.getBlastId() != null || !blastToSave.getBlastId().isEmpty() )
+        if(blastToSave.getBlastId() != null && !blastToSave.getBlastId().isEmpty() )
         {
-            logger.error("Received INVALID request to save blast but blast Id was NOT null or NOT empty. Cannot save blast with blast Id.");
+            logger.error("Received INVALID request to save blast but blast Id was NOT null or NOT empty. Cannot save blast!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

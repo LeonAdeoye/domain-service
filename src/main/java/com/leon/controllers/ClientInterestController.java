@@ -74,7 +74,7 @@ public class ClientInterestController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(clientInterestToSave.getClientInterestId() != null || !clientInterestToSave.getClientInterestId().isEmpty() )
+        if(clientInterestToSave.getClientInterestId() != null && !clientInterestToSave.getClientInterestId().isEmpty())
         {
             logger.error("Received INVALID request to save client interest but client interest Id was NOT null or NOT empty. Cannot save client interest!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
