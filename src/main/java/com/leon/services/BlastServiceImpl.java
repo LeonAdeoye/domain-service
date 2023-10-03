@@ -17,9 +17,8 @@ public class BlastServiceImpl implements BlastService
 {
     private static final Logger logger = LoggerFactory.getLogger(BlastServiceImpl.class);
     private Map<String, Blast> blastMap = new HashMap<>();
-
     @Autowired
-    BlastRepository blastRepository;
+    private BlastRepository blastRepository;
 
     @PostConstruct
     public void initialize()

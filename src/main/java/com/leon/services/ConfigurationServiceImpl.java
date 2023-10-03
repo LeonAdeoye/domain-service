@@ -13,9 +13,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 {
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationServiceImpl.class);
     private static Map<String, Map<String,List<Configuration>>> configurations;
-
     private static final String THIS_COMPONENT_NAME = "domain-service";
-
     @Autowired
     private MessagingService messagingService;
 

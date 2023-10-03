@@ -18,7 +18,7 @@ public class ClientServiceImpl implements ClientService
     private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
     private Map<String, Client> clientMap = new HashMap<>();
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @PostConstruct
     public void initialize()

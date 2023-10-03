@@ -18,7 +18,7 @@ public class ClientInterestServiceImpl implements ClientInterestService
     private static final Logger logger = LoggerFactory.getLogger(ClientInterestServiceImpl.class);
     private Map<String, ClientInterest> clientInterestMap = new HashMap<>();
     @Autowired
-    ClientInterestRepository clientInterestRepository;
+    private ClientInterestRepository clientInterestRepository;
 
     @PostConstruct
     public void initialize()
