@@ -23,9 +23,9 @@ public class ClientInterestServiceImpl implements ClientInterestService
     @PostConstruct
     public void initialize()
     {
-        logger.info("Loading client interest service.");
         List<ClientInterest> result = clientInterestRepository.findAll();
         result.forEach(clientInterest -> clientInterestMap.put(clientInterest.getClientInterestId(), clientInterest));
+        logger.info("Loaded client interest service with {} client interest(s).", result.size());
     }
 
     @Override

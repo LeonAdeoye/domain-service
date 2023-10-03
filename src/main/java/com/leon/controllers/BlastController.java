@@ -3,9 +3,14 @@ package com.leon.controllers;
 import com.leon.models.Blast;
 import com.leon.services.BlastService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
@@ -18,59 +23,89 @@ public class BlastController
 
     @CrossOrigin
     @RequestMapping(value="/reconfigure", method=GET)
-    public void reconfigure()
+    public ResponseEntity<Void> reconfigure()
     {
         logger.info("Received request to reconfigure.");
         this.blastService.reconfigure();
+        return ResponseEntity.noContent().build();
     }
 
     @CrossOrigin
-    @RequestMapping(value="/", method=POST)
-    public Blast save(@RequestBody Blast blastToSave)
+    @RequestMapping(method=POST, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Blast> save(@RequestBody Blast blastToSave)
     {
         if(blastToSave == null)
         {
-            logger.error("Received request to save blast but blast is null.");
-            return null;
+            logger.error("Received INVALID request to save blast but blast was null.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(blastToSave.getBlastId() != null || !blastToSave.getBlastId().isEmpty() )
+        {
+            logger.error("Received INVALID request to save blast but blast Id was NOT null or NOT empty. Cannot save blast with blast Id.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         logger.info("Received request to save blast: {}.", blastToSave);
-        return this.blastService.saveBlast(blastToSave);
+        Blast savedBlast = this.blastService.saveBlast(blastToSave);
+
+        if (savedBlast == null)
+        {
+            logger.error("Failed to save blast: {}.", blastToSave);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(savedBlast, HttpStatus.OK);
     }
 
     @CrossOrigin
-    @RequestMapping(value="/{id}", method=DELETE)
-    public void delete(@RequestParam String blastId)
+    @RequestMapping(method=DELETE)
+    public ResponseEntity<Void> delete(@RequestParam String blastId)
     {
         if(blastId == null || blastId.isEmpty())
         {
-            logger.error("Received request to delete blast but blast Id is null or empty.");
-            return;
+            logger.error("Received INVALID request to delete blast but blast Id was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         logger.info("Received request to delete blast with Id: {}.", blastId);
         this.blastService.deleteBlast(blastId);
+        return ResponseEntity.noContent().build();
     }
 
     @CrossOrigin
-    @RequestMapping(value="/{id}", method=PUT)
-    public Blast update(@RequestBody Blast blastToUpdate)
+    @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Blast> update(@RequestBody Blast blastToUpdate)
     {
         if(blastToUpdate == null)
         {
-            logger.error("Received request to update blast but blast is null.");
-            return null;
+            logger.error("Received INVALID request to update blast but blast was null.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(blastToUpdate.getBlastId() == null || blastToUpdate.getBlastId().isEmpty())
+        {
+            logger.error("Received INVALID request to update blast but blast Id was null or empty. Cannot update blast without blast Id.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         logger.info("Received request to update blast: {}.", blastToUpdate);
-        return this.blastService.updateBlast(blastToUpdate);
+        Blast updatedBlast = this.blastService.updateBlast(blastToUpdate);
+
+        if (updatedBlast == null)
+        {
+            logger.error("Failed to update blast: {}.", blastToUpdate);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(updatedBlast, HttpStatus.OK);
     }
 
     @CrossOrigin
-    @RequestMapping(value="/", method=GET)
-    public void getAll()
+    @RequestMapping(method=GET, produces = "application/json")
+    public ResponseEntity<List<Blast>> getAll()
     {
         logger.info("Received request to get all blasts.");
-        this.blastService.getBlasts();
+        return new ResponseEntity<>(this.blastService.getBlasts(), HttpStatus.OK);
     }
 }

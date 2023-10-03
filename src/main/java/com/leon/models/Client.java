@@ -66,7 +66,6 @@ public class Client
 
     public Client()
     {
-        this.clientId = "";
         this.clientName = "";
     }
 }

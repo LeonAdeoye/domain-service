@@ -25,9 +25,9 @@ public class BlastServiceImpl implements BlastService
     @PostConstruct
     public void initialize()
     {
-        logger.info("Loading blast service.");
         List<Blast> result = blastRepository.findAll();
         result.forEach(blast -> blastMap.put(blast.getBlastId(), blast));
+        logger.info("Loaded blast service with {} blast(s).", result.size());
     }
 
     public void reconfigure()

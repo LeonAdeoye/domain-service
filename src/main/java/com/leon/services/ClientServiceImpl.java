@@ -23,9 +23,9 @@ public class ClientServiceImpl implements ClientService
     @PostConstruct
     public void initialize()
     {
-        logger.info("Loading client service.");
         List<Client> result = clientRepository.findAll();
         result.forEach(client -> clientMap.put(client.getClientId(), client));
+        logger.info("Loaded client service with {} client(s).", result.size());
     }
 
     @Override
