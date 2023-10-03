@@ -5,6 +5,8 @@ import com.leon.services.ClientInterestService;
 import com.leon.services.ClientService;
 import com.leon.services.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,21 +27,21 @@ public class MainController
     private ClientInterestService clientInterestService;
 
     @RequestMapping("/heartbeat")
-    public String heartBeat()
+    public ResponseEntity<String> heartBeat()
     {
         logger.debug("Received heartbeat request and will respond.");
-
-        return "I am still here!";
+        return new ResponseEntity<>("I am still here!", HttpStatus.OK);
     }
 
     @CrossOrigin
     @RequestMapping("/reconfigure")
-    public void reconfigure()
+    public ResponseEntity<Void> reconfigure()
     {
         logger.info("Received request to reconfigure.");
         this.configurationService.reconfigure();
         this.blastService.reconfigure();
         this.clientService.reconfigure();
         this.clientInterestService.reconfigure();
+        return ResponseEntity.noContent().build();
     }
 }
