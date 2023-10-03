@@ -53,7 +53,7 @@ public class BlastController
     @RequestMapping(value="/", method=GET)
     public void getAll()
     {
-        logger.info("Received request to update blast.");
+        logger.info("Received request to get all blasts.");
         this.blastService.getBlasts();
     }
 }
