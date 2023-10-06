@@ -28,7 +28,7 @@ public class InstrumentServiceImpl implements InstrumentService
     public void initialize()
     {
         List<Instrument> result = instrumentRepository.findAll();
-        result.forEach(instrument -> instruments.addAll(result));
+        instruments.addAll(result);
         logger.info("Loaded instrument service with {} instruments(s).", result.size());
     }
 
