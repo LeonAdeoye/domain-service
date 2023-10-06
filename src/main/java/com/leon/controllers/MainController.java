@@ -1,9 +1,6 @@
 package com.leon.controllers;
 
-import com.leon.services.BlastService;
-import com.leon.services.ClientInterestService;
-import com.leon.services.ClientService;
-import com.leon.services.ConfigurationService;
+import com.leon.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +22,8 @@ public class MainController
     private ClientService clientService;
     @Autowired
     private ClientInterestService clientInterestService;
+    @Autowired
+    private InstrumentService instrumentService;
 
     @RequestMapping("/heartbeat")
     public ResponseEntity<String> heartBeat()
@@ -42,6 +41,7 @@ public class MainController
         this.blastService.reconfigure();
         this.clientService.reconfigure();
         this.clientInterestService.reconfigure();
+        this.instrumentService.reconfigure();
         return ResponseEntity.noContent().build();
     }
 }
