@@ -20,7 +20,7 @@ public class ClientInterest
     private String clientId;
     private String notes;
     private Side side;
-    private String symbol;
+    private String stockCode;
     private String ownerId;
 
     public ClientInterest()
@@ -29,16 +29,16 @@ public class ClientInterest
         ownerId = "";
         notes = "";
         side = Side.BUY;
-        symbol = "";
+        stockCode = "";
     }
 
-    public ClientInterest(String ownerId, String clientId, String notes, Side side, String symbol)
+    public ClientInterest(String ownerId, String clientId, String notes, Side side, String stockCode)
     {
         this.clientId = clientId;
         this.ownerId = ownerId;
         this.notes = notes;
         this.side = side;
-        this.symbol = symbol;
+        this.stockCode = stockCode;
     }
 
     public String getClientInterestId()
@@ -81,14 +81,14 @@ public class ClientInterest
         this.side = side;
     }
 
-    public String getSymbol()
+    public String getStockCode()
     {
-        return symbol;
+        return stockCode;
     }
 
-    public void setSymbol(String symbol)
+    public void setStockCode(String stockCode)
     {
-        this.symbol = symbol;
+        this.stockCode = stockCode;
     }
 
     public String getOwnerId()
@@ -110,7 +110,7 @@ public class ClientInterest
                 ", side=" + side +
                 ", ownerId=" + ownerId +
                 ", clientInterestId=" + clientInterestId +
-                ", symbol=" + symbol + "}";
+                ", stockCode=" + stockCode + "}";
     }
 
     @Override
@@ -119,11 +119,11 @@ public class ClientInterest
         if (this == o) return true;
         if (!(o instanceof ClientInterest)) return false;
         ClientInterest that = (ClientInterest) o;
-        return ownerId.equals(that.ownerId) && clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && symbol.equals(that.symbol);
+        return ownerId.equals(that.ownerId) && clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && stockCode.equals(that.stockCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ownerId, clientId, notes, side, symbol, clientInterestId);
+        return Objects.hash(ownerId, clientId, notes, side, stockCode, clientInterestId);
     }
 }

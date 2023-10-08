@@ -16,22 +16,22 @@ public class Instrument
     }
 
     private String stockCode;
-    private String description;
+    private String stockDescription;
     private AssetType assetType;
     private String blgCode;
 
     public Instrument()
     {
         stockCode = "";
-        description = "";
+        stockDescription = "";
         assetType = AssetType.STOCK;
         blgCode = "";
     }
 
-    public Instrument(String stockCode, String description, AssetType assetType, String blgCode)
+    public Instrument(String stockCode, String stockDescription, AssetType assetType, String blgCode)
     {
         this.stockCode = stockCode;
-        this.description = description;
+        this.stockDescription = stockDescription;
         this.assetType = assetType;
         this.blgCode = blgCode;
     }
@@ -46,14 +46,14 @@ public class Instrument
         this.stockCode = stockCode;
     }
 
-    public String getDescription()
+    public String getStockDescription()
     {
-        return description;
+        return stockDescription;
     }
 
-    public void setDescription(String description)
+    public void setStockDescription(String stockDescription)
     {
-        this.description = description;
+        this.stockDescription = stockDescription;
     }
 
     public AssetType getAssetType()
@@ -81,7 +81,7 @@ public class Instrument
     {
         return "Instrument{" +
                 "stockCode='" + stockCode + '\'' +
-                ", description='" + description + '\'' +
+                ", stockDescription='" + stockDescription + '\'' +
                 ", assetType=" + assetType +
                 ", blgCode='" + blgCode + '\'' +
                 '}';
@@ -93,12 +93,12 @@ public class Instrument
         if (this == o) return true;
         if (!(o instanceof Instrument)) return false;
         Instrument instrument = (Instrument) o;
-        return stockCode.equals(instrument.stockCode) && description.equals(instrument.description) && assetType.equals(instrument.assetType) && blgCode.equals(instrument.blgCode);
+        return stockCode.equals(instrument.stockCode) && stockDescription.equals(instrument.stockDescription) && assetType.equals(instrument.assetType) && blgCode.equals(instrument.blgCode);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(stockCode, description, assetType, blgCode);
+        return Objects.hash(stockCode, stockDescription, assetType, blgCode);
     }
 }
