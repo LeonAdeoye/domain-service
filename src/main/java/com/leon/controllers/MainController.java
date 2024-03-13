@@ -25,6 +25,9 @@ public class MainController
     @Autowired
     private InstrumentService instrumentService;
 
+    @Autowired
+    private NewsService newsService;
+
     @RequestMapping("/heartbeat")
     public ResponseEntity<String> heartBeat()
     {
@@ -42,6 +45,7 @@ public class MainController
         this.clientService.reconfigure();
         this.clientInterestService.reconfigure();
         this.instrumentService.reconfigure();
+        this.newsService.reconfigure();
         return ResponseEntity.noContent().build();
     }
 }
