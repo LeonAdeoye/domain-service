@@ -15,45 +15,45 @@ public class Instrument
         FUTURE
     }
 
-    private String stockCode;
-    private String stockDescription;
+    private String instrumentCode;
+    private String instrumentDescription;
     private AssetType assetType;
     private String blgCode;
 
     public Instrument()
     {
-        stockCode = "";
-        stockDescription = "";
+        instrumentCode = "";
+        instrumentDescription = "";
         assetType = AssetType.STOCK;
         blgCode = "";
     }
 
-    public Instrument(String stockCode, String stockDescription, AssetType assetType, String blgCode)
+    public Instrument(String instrumentCode, String instrumentDescription, AssetType assetType, String blgCode)
     {
-        this.stockCode = stockCode;
-        this.stockDescription = stockDescription;
+        this.instrumentCode = instrumentCode;
+        this.instrumentDescription = instrumentDescription;
         this.assetType = assetType;
         this.blgCode = blgCode;
     }
 
-    public String getStockCode()
+    public String getInstrumentCode()
     {
-        return stockCode;
+        return instrumentCode;
     }
 
-    public void setStockCode(String stockCode)
+    public void setInstrumentCode(String instrumentCode)
     {
-        this.stockCode = stockCode;
+        this.instrumentCode = instrumentCode;
     }
 
-    public String getStockDescription()
+    public String getInstrumentDescription()
     {
-        return stockDescription;
+        return instrumentDescription;
     }
 
-    public void setStockDescription(String stockDescription)
+    public void setInstrumentDescription(String instrumentDescription)
     {
-        this.stockDescription = stockDescription;
+        this.instrumentDescription = instrumentDescription;
     }
 
     public AssetType getAssetType()
@@ -80,8 +80,8 @@ public class Instrument
     public String toString()
     {
         return "Instrument{" +
-                "stockCode='" + stockCode + '\'' +
-                ", stockDescription='" + stockDescription + '\'' +
+                "instrumentCode='" + instrumentCode + '\'' +
+                ", instrumentDescription='" + instrumentDescription + '\'' +
                 ", assetType=" + assetType +
                 ", blgCode='" + blgCode + '\'' +
                 '}';
@@ -93,12 +93,12 @@ public class Instrument
         if (this == o) return true;
         if (!(o instanceof Instrument)) return false;
         Instrument instrument = (Instrument) o;
-        return stockCode.equals(instrument.stockCode) && stockDescription.equals(instrument.stockDescription) && assetType.equals(instrument.assetType) && blgCode.equals(instrument.blgCode);
+        return instrumentCode.equals(instrument.instrumentCode) && instrumentDescription.equals(instrument.instrumentDescription) && assetType.equals(instrument.assetType) && blgCode.equals(instrument.blgCode);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(stockCode, stockDescription, assetType, blgCode);
+        return Objects.hash(instrumentCode, instrumentDescription, assetType, blgCode);
     }
 }

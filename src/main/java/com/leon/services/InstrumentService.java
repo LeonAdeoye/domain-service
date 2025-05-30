@@ -8,4 +8,8 @@ public interface InstrumentService
 {
     List<Instrument> getAll();
     void reconfigure();
+
+    Instrument createInstrument(Instrument instrument);
+
+    void deleteInstrument(String instrumentCode);
 }

@@ -7,5 +7,9 @@ public interface ExchangeService
 {
     List<Exchange> getAll();
     void reconfigure();
+
+    Exchange createExchange(Exchange exchange);
+
+    void deleteExchange(String exchangeId);
 }
 

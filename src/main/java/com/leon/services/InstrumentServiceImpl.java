@@ -38,4 +38,36 @@ public class InstrumentServiceImpl implements InstrumentService
         instruments.clear();
         initialize();
     }
+
+    @Override
+    public Instrument createInstrument(Instrument instrument)
+    {
+        Instrument existingInstrument = instrumentRepository.findById(instrument.getInstrumentCode()).orElse(null);
+        if (existingInstrument != null)
+        {
+            logger.warn("Instrument with code {} already exists. Not creating a new one.", instrument.getInstrumentCode());
+            return existingInstrument;
+        }
+
+        Instrument createdInstrument = instrumentRepository.save(instrument);
+        instruments.add(createdInstrument);
+        logger.info("Created new instrument with code: {}", createdInstrument.getInstrumentCode());
+        return createdInstrument;
+    }
+
+    @Override
+    public void deleteInstrument(String instrumentCode)
+    {
+        Instrument instrumentToDelete = instrumentRepository.findById(instrumentCode).orElse(null);
+        if (instrumentToDelete != null)
+        {
+            instrumentRepository.delete(instrumentToDelete);
+            instruments.remove(instrumentToDelete);
+            logger.info("Deleted instrument with ID: {}", instrumentCode);
+        }
+        else
+        {
+            logger.warn("Attempted to delete non-existing instrument with code: {}", instrumentCode);
+        }
+    }
 }

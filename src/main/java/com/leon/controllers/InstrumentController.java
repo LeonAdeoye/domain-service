@@ -21,8 +21,7 @@ public class InstrumentController
 
     @CrossOrigin
     @RequestMapping(value="/reconfigure", method=GET)
-    public ResponseEntity<Void> reconfigure()
-    {
+    public ResponseEntity<Void> reconfigure() {
         logger.info("Received request to reconfigure.");
         this.instrumentService.reconfigure();
         return ResponseEntity.noContent().build();
@@ -30,9 +29,24 @@ public class InstrumentController
 
     @CrossOrigin
     @RequestMapping(method=GET, produces = "application/json")
-    public ResponseEntity<List<Instrument>> getAll()
-    {
+    public ResponseEntity<List<Instrument>> getAll() {
         logger.info("Received request to get all instruments.");
         return new ResponseEntity<>(this.instrumentService.getAll(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @RequestMapping(method=POST , consumes = "application/json"  ,produces = "application/json")
+    public ResponseEntity<Instrument> createInstrument(@RequestBody Instrument instrument) {
+        logger.info("Received request to create instrument: {}", instrument);
+        Instrument createdInstrument = instrumentService.createInstrument(instrument);
+        return new ResponseEntity<>(createdInstrument, HttpStatus.CREATED);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/{instrumentId}", method = DELETE)
+    public ResponseEntity<Void> deleteInstrument(@PathVariable String instrumentCode) {
+        logger.info("Received request to delete instrument with code: {}", instrumentCode);
+        instrumentService.deleteInstrument(instrumentCode);
+        return ResponseEntity.noContent().build();
     }
 }
