@@ -6,33 +6,45 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("Exchange")
 public class Exchange {
-    private String ExchangeName;
-    private String ExchangeId;
+    private String exchangeName;
+    private String exchangeId;
+
+    private String exchangeAcronym;
 
     public Exchange() {
-        ExchangeName = "";
-        ExchangeId = "";
+        exchangeName = "";
+        exchangeId = "";
+        exchangeAcronym = "";
     }
 
-    public Exchange(String exchangeName, String exchangeId) {
-        this.ExchangeName = exchangeName;
-        this.ExchangeId = exchangeId;
+    public Exchange(String exchangeName, String exchangeId, String exchangeAcronym) {
+        this.exchangeName = exchangeName;
+        this.exchangeId = exchangeId;
+        this.exchangeAcronym = exchangeAcronym;
     }
 
     public String getExchangeName() {
-        return ExchangeName;
+        return exchangeName;
     }
 
     public void setExchangeName(String exchangeName) {
-        this.ExchangeName = exchangeName;
+        this.exchangeName = exchangeName;
     }
 
     public String getExchangeId() {
-        return ExchangeId;
+        return exchangeId;
     }
 
     public void setExchangeId(String exchangeId) {
-        this.ExchangeId = exchangeId;
+        this.exchangeId = exchangeId;
+    }
+
+    public String getExchangeAcronym() {
+        return exchangeAcronym;
+    }
+
+    public void setExchangeAcronym(String exchangeAcronym) {
+        this.exchangeAcronym = exchangeAcronym;
     }
 
     @Override
@@ -40,19 +52,22 @@ public class Exchange {
         if (this == o) return true;
         if (!(o instanceof Exchange)) return false;
         Exchange exchange = (Exchange) o;
-        return ExchangeName.equals(exchange.ExchangeName) && ExchangeId.equals(exchange.ExchangeId);
+        return exchangeName.equals(exchange.exchangeName) &&
+               exchangeId.equals(exchange.exchangeId) &&
+               exchangeAcronym.equals(exchange.exchangeAcronym);
     }
 
     @Override
     public int hashCode() {
-        return 31 * ExchangeName.hashCode() + ExchangeId.hashCode();
+        return 31 * exchangeName.hashCode() + exchangeId.hashCode() + exchangeAcronym.hashCode();
     }
 
     @Override
     public String toString() {
         return "Exchange{" +
-                "ExchangeName='" + ExchangeName + '\'' +
-                ", ExchangeId='" + ExchangeId + '\'' +
+                "exchangeName='" + exchangeName + '\'' +
+                ", exchangeId='" + exchangeId + '\'' +
+                ", exchangeAcronym='" + exchangeAcronym + '\'' +
                 '}';
     }
 }
