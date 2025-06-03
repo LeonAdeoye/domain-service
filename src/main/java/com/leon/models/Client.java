@@ -5,21 +5,22 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("Client")
 public class Client
 {
     @Id
-    private String clientId;
+    private UUID clientId;
     private String clientName;
 
-    public String getClientId()
+    public UUID getClientId()
     {
         return clientId;
     }
 
-    public void setClientId(String clientId)
+    public void setClientId(UUID clientId)
     {
         this.clientId = clientId;
     }
@@ -58,7 +59,7 @@ public class Client
         return Objects.hash(clientId, clientName);
     }
 
-    public Client(String clientId, String clientName)
+    public Client(UUID clientId, String clientName)
     {
         this.clientId = clientId;
         this.clientName = clientName;

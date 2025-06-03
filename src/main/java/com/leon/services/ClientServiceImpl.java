@@ -10,13 +10,14 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ClientServiceImpl implements ClientService
 {
     private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
-    private Map<String, Client> clientMap = new HashMap<>();
+    private Map<UUID, Client> clientMap = new HashMap<>();
     @Autowired
     private ClientRepository clientRepository;
 
@@ -38,8 +39,8 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void delete(String clientId)
     {
-        clientRepository.deleteById(clientId);
-        clientMap.remove(clientId);
+        clientRepository.deleteById(UUID.fromString(clientId));
+        clientMap.remove(UUID.fromString(clientId));
     }
 
     @Override
