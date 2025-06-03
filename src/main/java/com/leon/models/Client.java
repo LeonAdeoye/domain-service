@@ -67,6 +67,7 @@ public class Client
 
     public Client()
     {
+        this.clientId = UUID.randomUUID();
         this.clientName = "";
     }
 }
