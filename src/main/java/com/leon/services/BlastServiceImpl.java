@@ -7,11 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class BlastServiceImpl implements BlastService
@@ -55,7 +51,7 @@ public class BlastServiceImpl implements BlastService
     @Override
     public void deleteBlast(String ownerId, String blastId)
     {
-        blastRepository.deleteById(blastId);
+        blastRepository.deleteById(UUID.fromString(blastId));
         List<Blast> blasts = blastMap.get(ownerId);
         blasts.removeIf(blast -> blast.getBlastId().equals(blastId));
     }

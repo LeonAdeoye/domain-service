@@ -19,10 +19,10 @@ public class Blast
     }
 
     @Id
-    private String blastId;
+    private UUID blastId;
     private String ownerId;
     private String blastName;
-    private String clientId;
+    private UUID clientId;
     private List<String> markets;
     private List<ContentType> contents = new ArrayList<>();
     private LocalTime triggerTime;
@@ -32,15 +32,16 @@ public class Blast
     public Blast()
     {
         this.blastName = "";
-        this.clientId = "";
+        this.clientId = UUID.randomUUID();
         this.ownerId = "";
+        this.blastId = UUID.randomUUID();
         this.markets = new ArrayList<>();
         this.contents = new ArrayList<>();
         this.advFilter = new HashMap<>();
         this.notionalValueFilter = new HashMap<>();
     }
 
-    public Blast(String ownerId, String blastName, String clientId, List<String> markets, List<ContentType> contents, LocalTime triggerTime, Map<String, Double> advFilter, Map<String, Integer> notionalValueFilter)
+    public Blast(String ownerId, String blastName, UUID clientId, List<String> markets, List<ContentType> contents, LocalTime triggerTime, Map<String, Double> advFilter, Map<String, Integer> notionalValueFilter)
     {
         this.blastName = blastName;
         this.clientId = clientId;
@@ -62,12 +63,12 @@ public class Blast
         this.ownerId = ownerId;
     }
 
-    public String getBlastId()
+    public UUID getBlastId()
     {
         return blastId;
     }
 
-    public void setBlastId(String blastId)
+    public void setBlastId(UUID blastId)
     {
         this.blastId = blastId;
     }
@@ -82,12 +83,12 @@ public class Blast
         this.blastName = blastName;
     }
 
-    public String getClientId()
+    public UUID getClientId()
     {
         return clientId;
     }
 
-    public void setClientId(String clientId)
+    public void setClientId(UUID clientId)
     {
         this.clientId = clientId;
     }
