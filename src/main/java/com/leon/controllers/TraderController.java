@@ -7,11 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping("/trader")
@@ -31,7 +29,7 @@ public class TraderController
     }
 
     @CrossOrigin
-    @RequestMapping(method=GET)
+    @RequestMapping(method=GET, produces = "application/json")
     public ResponseEntity<List<Trader>> getAllTraders()
     {
         logger.info("Received request to get all desks.");
@@ -42,42 +40,88 @@ public class TraderController
     @RequestMapping(method=DELETE)
     public ResponseEntity<Void> deleteTrader(String traderId)
     {
+        if(traderId == null || traderId.isEmpty())
+        {
+            logger.error("Received request to delete trader but trader ID was null or empty.");
+            return ResponseEntity.badRequest().build();
+        }
+
         logger.info("Received request to delete trader with ID: {}", traderId);
 
-        if (traderService.doesTraderExist(traderId)) {
+        if (traderService.doesTraderExist(traderId))
+        {
             traderService.deleteTrader(traderId);
             return ResponseEntity.noContent().build();
-        } else {
+        }
+        else
+        {
             logger.warn("Trader with ID {} does not exist.", traderId);
             return ResponseEntity.notFound().build();
         }
     }
 
     @CrossOrigin
-    @RequestMapping(value="/{traderId}", method=GET)
+    @RequestMapping(value="/{traderId}", method=GET, produces = "application/json")
     public ResponseEntity<Trader> getTraderById(String traderId)
     {
+        if (traderId == null || traderId.isEmpty())
+        {
+            logger.error("Received request to get trader but trader ID was null or empty.");
+            return ResponseEntity.badRequest().build();
+        }
+
         logger.info("Received request to get trader with ID: {}", traderId);
         Trader trader = traderService.getTraderById(traderId);
 
-        if (trader != null) {
+        if (trader != null)
+        {
             return ResponseEntity.ok(trader);
-        } else {
+        }
+        else
+        {
             logger.warn("Trader with ID {} not found.", traderId);
             return ResponseEntity.notFound().build();
         }
     }
 
 
-    @PostMapping
-    public ResponseEntity<Trader> createTrader(@RequestBody Trader trader) {
+    @CrossOrigin
+    @RequestMapping(method=POST, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Trader> createTrader(@RequestBody Trader trader)
+    {
+        if (trader == null || trader.getTraderId() == null || trader.getTraderId().toString().isEmpty())
+        {
+            logger.error("Attempted to create a trader with null or empty ID.");
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (trader.getFirstName() == null || trader.getFirstName().isEmpty())
+        {
+            logger.error("Attempted to create a trader with null or empty first name.");
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (trader.getLastName() == null || trader.getLastName().isEmpty())
+        {
+            logger.error("Attempted to create a trader with null or empty last name.");
+            return ResponseEntity.badRequest().build();
+        }
+
         logger.info("Creating new trader.");
         Trader createdTrader = traderService.createTrader(trader);
         return ResponseEntity.ok(createdTrader);
     }
 
-    @PutMapping
-    public ResponseEntity<Trader> updateTrader(@RequestBody Trader trader) {
+    @CrossOrigin
+    @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Trader> updateTrader(@RequestBody Trader trader)
+    {
+        if (trader == null || trader.getTraderId() == null || trader.getTraderId().toString().isEmpty())
+        {
+            logger.error("Attempted to update a trader with null or empty ID.");
+            return ResponseEntity.badRequest().build();
+        }
+
         logger.info("Updating trader with ID: {}", trader.getTraderId());
         Trader updatedTrader = traderService.updateTrader(trader);
         if (updatedTrader != null) {
@@ -88,8 +132,16 @@ public class TraderController
         }
     }
 
-    @GetMapping("/exists/{traderId}")
-    public ResponseEntity<Boolean> doesTraderExist(@PathVariable String traderId) {
+    @CrossOrigin
+    @RequestMapping(value="/exists/{traderId}", method=GET)
+    public ResponseEntity<Boolean> doesTraderExist(@PathVariable String traderId)
+    {
+        if (traderId == null || traderId.isEmpty())
+        {
+            logger.error("Received request to check existence of trader but trader ID was null or empty.");
+            return ResponseEntity.badRequest().build();
+        }
+
         logger.info("Checking existence of trader with ID: {}", traderId);
         boolean exists = traderService.doesTraderExist(traderId);
         return ResponseEntity.ok(exists);

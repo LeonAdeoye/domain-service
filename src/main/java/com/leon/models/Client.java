@@ -3,7 +3,6 @@ package com.leon.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,6 +13,7 @@ public class Client
     @Id
     private UUID clientId;
     private String clientName;
+    private String clientCode;
 
     public UUID getClientId()
     {
@@ -35,12 +35,23 @@ public class Client
         this.clientName = clientName;
     }
 
+    public String getClientCode()
+    {
+        return clientCode;
+    }
+
+    public void setClientCode(String clientCode)
+    {
+        this.clientCode = clientCode;
+    }
+
     @Override
     public String toString()
     {
         return "Client{" +
                 "clientId=" + clientId +
                 ", clientName='" + clientName + '\'' +
+                ", clientCode='" + clientCode + '\'' +
                 '}';
     }
 
@@ -50,24 +61,25 @@ public class Client
         if (this == o) return true;
         if (!(o instanceof Client)) return false;
         Client client = (Client) o;
-        return clientId.equals(client.clientId) && clientName.equals(client.clientName);
+        return clientId.equals(client.clientId) && clientName.equals(client.clientName) && Objects.equals(clientCode, client.clientCode);
     }
 
     @Override
-    public int hashCode()
-    {
-        return Objects.hash(clientId, clientName);
+    public int hashCode() {
+        return Objects.hash(clientId, clientName, clientCode);
     }
 
     public Client(UUID clientId, String clientName)
     {
         this.clientId = clientId;
         this.clientName = clientName;
+        this.clientCode = "";
     }
 
     public Client()
     {
         this.clientId = UUID.randomUUID();
         this.clientName = "";
+        this.clientCode = "";
     }
 }

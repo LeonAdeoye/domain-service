@@ -11,6 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+// SAMPLE DATA
+// [
+//    {
+//        "clientInterestId": "2dbdbc66-c51b-4d3f-87bf-7219ebd492e8",
+//        "clientId": "f066ba8b-4a89-4f48-ab4a-f80a1a9be4de",
+//        "notes": "Nomura notes",
+//        "side": "BUY",
+//        "instrumentCode": "8602.T",
+//        "ownerId": "ladeoye"
+//    }
+//]
+
 @RestController()
 @RequestMapping("/interest")
 public class ClientInterestController
@@ -92,9 +104,9 @@ public class ClientInterestController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(clientInterestToSave.getClientInterestId() != null && !clientInterestToSave.getClientInterestId().isEmpty())
+        if(clientInterestToSave.getClientInterestId() == null && clientInterestToSave.getClientInterestId().toString().isEmpty())
         {
-            logger.error("Received INVALID request to save client interest but client interest Id was NOT null or NOT empty. Cannot save client interest!");
+            logger.error("Received request to save client interest but client interest Id was null or empty. Cannot save client interest without valid client interest Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -120,7 +132,7 @@ public class ClientInterestController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(clientInterestToUpdate.getClientInterestId() == null || clientInterestToUpdate.getClientInterestId().isEmpty() )
+        if(clientInterestToUpdate.getClientInterestId() == null || clientInterestToUpdate.getClientInterestId().toString().isEmpty())
         {
             logger.error("Received INVALID request to update client interest but client interest Id was null or empty. Cannot update client interest without valid client interest Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

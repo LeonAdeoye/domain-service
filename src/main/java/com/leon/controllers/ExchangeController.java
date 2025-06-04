@@ -38,13 +38,16 @@ public class ExchangeController
 
     @CrossOrigin
     @RequestMapping(method=POST , consumes = "application/json"  ,produces = "application/json")
-    public ResponseEntity<Exchange> createExchange(@RequestBody Exchange exchange) {
-        if (exchange == null || exchange.getExchangeId() == null || exchange.getExchangeId().toString().isEmpty()) {
+    public ResponseEntity<Exchange> createExchange(@RequestBody Exchange exchange)
+    {
+        if (exchange == null || exchange.getExchangeId() == null || exchange.getExchangeId().toString().isEmpty())
+        {
             logger.error("Attempted to create an exchange with null or empty ID.");
             return null;
         }
 
-        if(exchange.getExchangeName() == null || exchange.getExchangeName().isEmpty()) {
+        if(exchange.getExchangeName() == null || exchange.getExchangeName().isEmpty())
+        {
             logger.error("Attempted to create an exchange with null or empty name.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -56,7 +59,8 @@ public class ExchangeController
 
     @CrossOrigin
     @RequestMapping(value = "/{exchangeId}", method = DELETE)
-    public ResponseEntity<Void> deleteExchange(@PathVariable String exchangeId) {
+    public ResponseEntity<Void> deleteExchange(@PathVariable String exchangeId)
+    {
         logger.info("Received request to delete exchange with ID: {}", exchangeId);
         exchangeService.deleteExchange(exchangeId);
         return ResponseEntity.noContent().build();

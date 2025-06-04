@@ -12,4 +12,5 @@ public interface InstrumentService
     Instrument createInstrument(Instrument instrument);
 
     void deleteInstrument(String instrumentCode);
+    Instrument updateInstrument(Instrument instrument);
 }

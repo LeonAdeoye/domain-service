@@ -9,11 +9,11 @@ public interface NewsService
 {
     void reconfigure();
 
-    void saveNews(News newsToSave);
+    News saveNews(News newsToSave);
 
     void deleteNews(String newsId);
 
-    void updateNews(News newsToUpdate);
+    News updateNews(News newsToUpdate);
 
     List<News> getNewsByStockCode(String stockCode, LocalDateTime fromTimeStamp);
 

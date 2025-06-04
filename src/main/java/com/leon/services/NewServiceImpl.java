@@ -6,13 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NewServiceImpl implements NewsService
@@ -47,30 +44,27 @@ public class NewServiceImpl implements NewsService
     }
 
     @Override
-    public void saveNews(News newsToSave)
+    public News saveNews(News newsToSave)
     {
-        News result = newsRepository.save(newsToSave);
+        News savedNews = newsRepository.save(newsToSave);
         addNewsToMap(newsToSave);
+        return savedNews;
     }
 
     @Override
-    public void deleteNews(String newsId)
-    {
-        newsRepository.deleteById(newsId);
-        for(List<News> newsList : newsMap.values())
-        {
-            if(newsList.removeIf(news -> news.getNewsId().equals(newsId)))
-                break;
-        }
+    public void deleteNews(String newsId)   {
+        newsRepository.deleteById(UUID.fromString(newsId));
+        newsMap.values().forEach(newsList -> newsList.removeIf(news -> news.getNewsId().equals(UUID.fromString(newsId))));
     }
 
     @Override
-    public void updateNews(News newsToUpdate)
+    public News updateNews(News newsToUpdate)
     {
-        newsRepository.save(newsToUpdate);
-        List<News> newsList = newsMap.get(newsToUpdate.getNewsId());
+        News savedNews = newsRepository.save(newsToUpdate);
+        List<News> newsList = newsMap.get(newsToUpdate.getStockCode());
         newsList.removeIf(news -> news.getNewsId().equals(newsToUpdate.getNewsId()));
-        newsList.add(newsToUpdate);
+        newsList.add(savedNews);
+        return savedNews;
     }
 
     @Override
@@ -78,7 +72,7 @@ public class NewServiceImpl implements NewsService
     {
         return newsMap.get(stockCode).stream()
                 .filter(newsItem -> newsItem.getTimeStamp().isAfter(fromTimeStamp))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -87,7 +81,7 @@ public class NewServiceImpl implements NewsService
         return newsMap.values().stream()
                 .flatMap(List::stream)
                 .filter(newsItem -> newsItem.getTimeStamp().isAfter(fromTimeStamp))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -96,6 +90,6 @@ public class NewServiceImpl implements NewsService
         return newsMap.values().stream()
                 .flatMap(List::stream)
                 .filter(newsItem -> newsItem.getTimeStamp().isAfter(fromTimeStamp) && newsItem.getSource().equals(source))
-                .toList();
+                .collect(Collectors.toList());
     }
 }

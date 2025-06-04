@@ -24,9 +24,20 @@ public class MainController
     private ClientInterestService clientInterestService;
     @Autowired
     private InstrumentService instrumentService;
-
     @Autowired
     private NewsService newsService;
+
+    @Autowired
+    private DeskService deskService;
+
+    @Autowired
+    private TraderService traderService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private ExchangeService exchangeService;
 
     @RequestMapping("/heartbeat")
     public ResponseEntity<String> heartBeat()
@@ -46,6 +57,11 @@ public class MainController
         this.clientInterestService.reconfigure();
         this.instrumentService.reconfigure();
         this.newsService.reconfigure();
+        this.accountService.reconfigure();
+        this.deskService.reconfigure();
+        this.traderService.reconfigure();
+        this.exchangeService.reconfigure();
+        logger.info("Reconfiguration completed successfully.");
         return ResponseEntity.noContent().build();
     }
 }

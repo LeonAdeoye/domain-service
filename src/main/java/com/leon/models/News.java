@@ -3,15 +3,15 @@ package com.leon.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("News")
 public class News
 {
     @Id
-    private String newsId;
+    private UUID newsId;
     private String stockCode;
     private String headline;
     private String link;
@@ -20,7 +20,7 @@ public class News
 
     public News()
     {
-        this.newsId = "";
+        this.newsId = UUID.randomUUID();
         this.stockCode = "";
         this.headline = "";
         this.link = "";
@@ -30,7 +30,6 @@ public class News
 
     public News(String newsId, String stockCode, String headline, String link, String source, LocalDateTime timeStamp)
     {
-        this.newsId = newsId;
         this.stockCode = stockCode;
         this.headline = headline;
         this.link = link;
@@ -38,12 +37,12 @@ public class News
         this.timeStamp = timeStamp;
     }
 
-    public String getNewsId()
+    public UUID getNewsId()
     {
         return newsId;
     }
 
-    public void setNewsId(String newsId)
+    public void setNewsId(UUID newsId)
     {
         this.newsId = newsId;
     }

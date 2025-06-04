@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class InstrumentServiceImpl implements InstrumentService
@@ -27,9 +28,8 @@ public class InstrumentServiceImpl implements InstrumentService
     @PostConstruct
     public void initialize()
     {
-        List<Instrument> result = instrumentRepository.findAll();
-        instruments.addAll(result);
-        logger.info("Loaded instrument service with {} instruments(s).", result.size());
+        instruments.addAll(instrumentRepository.findAll());
+        logger.info("Loaded instrument service with {} instruments(s).", instruments.size());
     }
 
     @Override
@@ -42,32 +42,47 @@ public class InstrumentServiceImpl implements InstrumentService
     @Override
     public Instrument createInstrument(Instrument instrument)
     {
-        Instrument existingInstrument = instrumentRepository.findById(instrument.getInstrumentCode()).orElse(null);
+        Instrument existingInstrument = instrumentRepository.findById(instrument.getInstrumentId()).orElse(null);
         if (existingInstrument != null)
         {
-            logger.warn("Instrument with code {} already exists. Not creating a new one.", instrument.getInstrumentCode());
+            logger.warn("Instrument {} already exists. Not creating a new one.", instrument);
             return existingInstrument;
         }
 
         Instrument createdInstrument = instrumentRepository.save(instrument);
         instruments.add(createdInstrument);
-        logger.info("Created new instrument with code: {}", createdInstrument.getInstrumentCode());
+        logger.info("Created new instrument: {}", createdInstrument);
         return createdInstrument;
     }
 
     @Override
-    public void deleteInstrument(String instrumentCode)
+    public void deleteInstrument(String instrumentId)
     {
-        Instrument instrumentToDelete = instrumentRepository.findById(instrumentCode).orElse(null);
+        Instrument instrumentToDelete = instrumentRepository.findById(UUID.fromString(instrumentId)).orElse(null);
         if (instrumentToDelete != null)
         {
             instrumentRepository.delete(instrumentToDelete);
-            instruments.remove(instrumentToDelete);
-            logger.info("Deleted instrument with ID: {}", instrumentCode);
+            instruments.removeIf(instrument -> instrument.getInstrumentId().equals(instrumentToDelete.getInstrumentId()));
+            logger.info("Deleted instrument: {}", instrumentToDelete);
         }
         else
         {
-            logger.warn("Attempted to delete non-existing instrument with code: {}", instrumentCode);
+            logger.warn("Attempted to delete non-existing instrument with Id: {}", instrumentId);
         }
+    }
+
+    @Override
+    public Instrument updateInstrument(Instrument instrumentToUpdate) {
+        Instrument existingInstrument = instrumentRepository.findById(instrumentToUpdate.getInstrumentId()).orElse(null);
+        if (existingInstrument == null) {
+            logger.warn("Instrument {} does not exist. Cannot update.", instrumentToUpdate);
+            return null;
+        }
+
+        Instrument updatedInstrument = instrumentRepository.save(instrumentToUpdate);
+        instruments.removeIf(instrument -> instrument.getInstrumentId().equals(existingInstrument.getInstrumentId()));
+        instruments.add(updatedInstrument);
+        logger.info("Updated instrument: {}", updatedInstrument);
+        return updatedInstrument;
     }
 }

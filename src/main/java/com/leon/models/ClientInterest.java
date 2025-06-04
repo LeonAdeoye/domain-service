@@ -4,59 +4,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Objects;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("ClientInterest")
 public class ClientInterest
 {
-    enum Side
-    {
-        BUY,
-        SELL
-    }
-
     @Id
-    private String clientInterestId;
-    private String clientId;
+    private UUID clientInterestId;
+    private UUID clientId;
     private String notes;
     private Side side;
-    private String stockCode;
+    private String instrumentCode;
     private String ownerId;
 
     public ClientInterest()
     {
-        clientId = "";
+        this.clientInterestId = UUID.randomUUID();
+        clientId = UUID.randomUUID();
         ownerId = "";
         notes = "";
         side = Side.BUY;
-        stockCode = "";
+        instrumentCode = "";
     }
 
-    public ClientInterest(String ownerId, String clientId, String notes, Side side, String stockCode)
+    public ClientInterest(String ownerId, UUID clientId, String notes, Side side, String stockCode)
     {
         this.clientId = clientId;
         this.ownerId = ownerId;
         this.notes = notes;
         this.side = side;
-        this.stockCode = stockCode;
+        this.instrumentCode = stockCode;
     }
 
-    public String getClientInterestId()
+    public UUID getClientInterestId()
     {
         return clientInterestId;
     }
 
-    public void setClientInterestId(String clientInterestId)
+    public void setClientInterestId(UUID clientInterestId)
     {
         this.clientInterestId = clientInterestId;
     }
 
-    public String getClientId()
+    public UUID getClientId()
     {
         return clientId;
     }
 
-    public void setClientId(String clientId)
+    public void setClientId(UUID clientId)
     {
         this.clientId = clientId;
     }
@@ -81,14 +77,14 @@ public class ClientInterest
         this.side = side;
     }
 
-    public String getStockCode()
+    public String getInstrumentCode()
     {
-        return stockCode;
+        return instrumentCode;
     }
 
-    public void setStockCode(String stockCode)
+    public void setInstrumentCode(String instrumentCode)
     {
-        this.stockCode = stockCode;
+        this.instrumentCode = instrumentCode;
     }
 
     public String getOwnerId()
@@ -110,7 +106,7 @@ public class ClientInterest
                 ", side=" + side +
                 ", ownerId=" + ownerId +
                 ", clientInterestId=" + clientInterestId +
-                ", stockCode=" + stockCode + "}";
+                ", instrumentCode=" + instrumentCode + "}";
     }
 
     @Override
@@ -119,11 +115,11 @@ public class ClientInterest
         if (this == o) return true;
         if (!(o instanceof ClientInterest)) return false;
         ClientInterest that = (ClientInterest) o;
-        return ownerId.equals(that.ownerId) && clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && stockCode.equals(that.stockCode);
+        return ownerId.equals(that.ownerId) && clientInterestId.equals(that.clientInterestId) && clientId.equals(that.clientId) && notes.equals(that.notes) && side == that.side && instrumentCode.equals(that.instrumentCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ownerId, clientId, notes, side, stockCode, clientInterestId);
+        return Objects.hash(ownerId, clientId, notes, side, instrumentCode, clientInterestId);
     }
 }

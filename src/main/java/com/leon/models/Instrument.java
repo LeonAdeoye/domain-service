@@ -1,39 +1,51 @@
 package com.leon.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Objects;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("Instrument")
 public class Instrument
 {
-    enum AssetType
-    {
-        STOCK,
-        OPTION,
-        FUTURE
-    }
-
+    @Id
+    private UUID instrumentId;
     private String instrumentCode;
     private String instrumentDescription;
     private AssetType assetType;
     private String blgCode;
+    private String ric;
+    private Currency settlementCurrency;
+    private SettlementType settlementType;
+    private String exchangeAcronym;
+
 
     public Instrument()
     {
+        this.instrumentId = UUID.randomUUID();
         instrumentCode = "";
         instrumentDescription = "";
         assetType = AssetType.STOCK;
         blgCode = "";
+        ric = "";
+        settlementCurrency = Currency.HKD;
+        settlementType = SettlementType.T_PLUS_ONE;
+        exchangeAcronym = "HKSE";
     }
 
-    public Instrument(String instrumentCode, String instrumentDescription, AssetType assetType, String blgCode)
+    public Instrument(String instrumentCode, String instrumentDescription, AssetType assetType, String blgCode, String ric, Currency settlementCurrency, SettlementType settlementType, String exchangeAcronym)
     {
         this.instrumentCode = instrumentCode;
         this.instrumentDescription = instrumentDescription;
         this.assetType = assetType;
         this.blgCode = blgCode;
+        this.ric = ric;
+        this.settlementCurrency = settlementCurrency;
+        this.settlementType = settlementType;
+        this.instrumentId = UUID.randomUUID();
+        this.exchangeAcronym = exchangeAcronym;
     }
 
     public String getInstrumentCode()
@@ -76,6 +88,46 @@ public class Instrument
         this.blgCode = blgCode;
     }
 
+    public UUID getInstrumentId() {
+        return instrumentId;
+    }
+
+    public void setInstrumentId(UUID instrumentId) {
+        this.instrumentId = instrumentId;
+    }
+
+    public String getRic() {
+        return ric;
+    }
+
+    public void setRic(String ric) {
+        this.ric = ric;
+    }
+
+    public Currency getSettlementCurrency() {
+        return settlementCurrency;
+    }
+
+    public void setSettlementCurrency(Currency settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public SettlementType getSettlementType() {
+        return settlementType;
+    }
+
+    public void setSettlementType(SettlementType settlementType) {
+        this.settlementType = settlementType;
+    }
+
+    public String getExchangeAcronym() {
+        return exchangeAcronym;
+    }
+
+    public void setExchangeAcronym(String exchangeAcronym) {
+        this.exchangeAcronym = exchangeAcronym;
+    }
+
     @Override
     public String toString()
     {
@@ -84,21 +136,28 @@ public class Instrument
                 ", instrumentDescription='" + instrumentDescription + '\'' +
                 ", assetType=" + assetType +
                 ", blgCode='" + blgCode + '\'' +
+                ", RIC='" + ric + '\'' +
+                ", settlementCurrency=" + settlementCurrency +
+                ", settlementType=" + settlementType +
+                ", instrumentId=" + instrumentId +
+                ", exchangeAcronym='" + exchangeAcronym + '\'' +
                 '}';
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Instrument)) return false;
-        Instrument instrument = (Instrument) o;
-        return instrumentCode.equals(instrument.instrumentCode) && instrumentDescription.equals(instrument.instrumentDescription) && assetType.equals(instrument.assetType) && blgCode.equals(instrument.blgCode);
+        Instrument that = (Instrument) o;
+        return getInstrumentId().equals(that.getInstrumentId()) && getInstrumentCode().equals(that.getInstrumentCode())
+                && getInstrumentDescription().equals(that.getInstrumentDescription()) && getAssetType() == that.getAssetType()
+                && Objects.equals(getBlgCode(), that.getBlgCode()) && Objects.equals(getRic(), that.getRic()) && getSettlementCurrency() == that.getSettlementCurrency()
+                && getSettlementType() == that.getSettlementType() && Objects.equals(getExchangeAcronym(), that.getExchangeAcronym());
     }
 
     @Override
-    public int hashCode()
-    {
-        return Objects.hash(instrumentCode, instrumentDescription, assetType, blgCode);
+    public int hashCode() {
+        return Objects.hash(getInstrumentId(), getInstrumentCode(), getInstrumentDescription(),
+                getAssetType(), getBlgCode(), getRic(), getSettlementCurrency(), getSettlementType(), getExchangeAcronym());
     }
 }

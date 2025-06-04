@@ -41,18 +41,6 @@ public class Blast
         this.notionalValueFilter = new HashMap<>();
     }
 
-    public Blast(String ownerId, String blastName, UUID clientId, List<String> markets, List<ContentType> contents, LocalTime triggerTime, Map<String, Double> advFilter, Map<String, Integer> notionalValueFilter)
-    {
-        this.blastName = blastName;
-        this.clientId = clientId;
-        this.ownerId = ownerId;
-        this.markets = markets;
-        this.contents = contents;
-        this.triggerTime = triggerTime;
-        this.advFilter = advFilter;
-        this.notionalValueFilter = notionalValueFilter;
-    }
-
     public String getOwnerId()
     {
         return ownerId;
