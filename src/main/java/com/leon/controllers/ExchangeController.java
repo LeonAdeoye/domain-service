@@ -39,7 +39,7 @@ public class ExchangeController
     @CrossOrigin
     @RequestMapping(method=POST , consumes = "application/json"  ,produces = "application/json")
     public ResponseEntity<Exchange> createExchange(@RequestBody Exchange exchange) {
-        if (exchange == null || exchange.getExchangeId() == null || exchange.getExchangeId().isEmpty()) {
+        if (exchange == null || exchange.getExchangeId() == null || exchange.getExchangeId().toString().isEmpty()) {
             logger.error("Attempted to create an exchange with null or empty ID.");
             return null;
         }

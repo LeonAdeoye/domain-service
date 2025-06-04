@@ -87,13 +87,9 @@ public class DeskServiceImpl implements DeskService
         Optional<Desk> existingDeskOptional = deskRepository.findById(desk.getDeskId());
         if (existingDeskOptional.isPresent())
         {
-            Desk existingDesk = existingDeskOptional.get();
-            Desk updatedDesk = deskRepository.save(existingDesk);
-            int index = desks.indexOf(existingDesk);
-            if (index != -1)
-                desks.set(index, updatedDesk);
-            else
-                desks.add(updatedDesk);
+            Desk updatedDesk = deskRepository.save(desk);
+            desks.removeIf(deskToRemove -> deskToRemove.getDeskId().equals(desk.getDeskId()));
+            desks.add(updatedDesk);
             logger.info("Updated desk with ID: {}", updatedDesk.getDeskId());
             return updatedDesk;
         }

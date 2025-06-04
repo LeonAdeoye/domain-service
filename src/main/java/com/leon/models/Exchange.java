@@ -1,23 +1,26 @@
 package com.leon.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("Exchange")
 public class Exchange {
     private String exchangeName;
-    private String exchangeId;
+    @Id
+    private UUID exchangeId;
 
     private String exchangeAcronym;
 
     public Exchange() {
         exchangeName = "";
-        exchangeId = "";
+        exchangeId = UUID.randomUUID();
         exchangeAcronym = "";
     }
 
-    public Exchange(String exchangeName, String exchangeId, String exchangeAcronym) {
+    public Exchange(String exchangeName, UUID exchangeId, String exchangeAcronym) {
         this.exchangeName = exchangeName;
         this.exchangeId = exchangeId;
         this.exchangeAcronym = exchangeAcronym;
@@ -31,11 +34,11 @@ public class Exchange {
         this.exchangeName = exchangeName;
     }
 
-    public String getExchangeId() {
+    public UUID getExchangeId() {
         return exchangeId;
     }
 
-    public void setExchangeId(String exchangeId) {
+    public void setExchangeId(UUID exchangeId) {
         this.exchangeId = exchangeId;
     }
 

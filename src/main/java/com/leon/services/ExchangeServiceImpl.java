@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ExchangeServiceImpl implements ExchangeService {
@@ -28,7 +29,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     {
         List<Exchange> result = exchangeRepository.findAll();
         exchanges.addAll(result);
-        logger.info("Loaded instrument service with {} instruments(s).", result.size());
+        logger.info("Loaded exchange service with {} exchange(s).", result.size());
     }
 
     @Override
@@ -57,7 +58,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     @Override
     public void deleteExchange(String exchangeId)
     {
-        Exchange exchangeToDelete = exchangeRepository.findById(exchangeId).orElse(null);
+        Exchange exchangeToDelete = exchangeRepository.findById(UUID.fromString(exchangeId)).orElse(null);
         if (exchangeToDelete != null)
         {
             exchangeRepository.delete(exchangeToDelete);
@@ -65,8 +66,6 @@ public class ExchangeServiceImpl implements ExchangeService {
             logger.info("Deleted exchange with ID: {}", exchangeId);
         }
         else
-        {
             logger.warn("Attempted to delete non-existing exchange with ID: {}", exchangeId);
-        }
     }
 }

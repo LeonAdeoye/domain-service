@@ -73,7 +73,7 @@ public class TraderServiceImpl  implements TraderService
         }
 
         Trader updatedTrader = traderRepository.save(trader);
-        traders.remove(existingTrader);
+        traders.removeIf(traderToRemove -> traderToRemove.getTraderId().equals(trader.getTraderId()));
         traders.add(updatedTrader);
         logger.info("Updated trader with ID: {}", updatedTrader.getTraderId());
         return updatedTrader;
