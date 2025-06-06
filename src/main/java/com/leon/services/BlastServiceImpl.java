@@ -1,6 +1,7 @@
 package com.leon.services;
 
 import com.leon.models.Blast;
+import com.leon.models.ClientInterest;
 import com.leon.repositories.BlastRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,12 @@ public class BlastServiceImpl implements BlastService
     @Override
     public Blast saveBlast(Blast blastToSave)
     {
+        Optional<Blast> existingBlast = blastRepository.findById(blastToSave.getBlastId());
+        if (existingBlast.isPresent())
+        {
+            logger.warn("Blast with ID {} already exists.", blastToSave.getBlastId().toString());
+            return blastToSave;
+        }
         Blast result = blastRepository.save(blastToSave);
         if(!blastMap.containsKey(blastToSave.getOwnerId()))
             blastMap.put(blastToSave.getOwnerId(), new ArrayList<>());
@@ -51,19 +58,31 @@ public class BlastServiceImpl implements BlastService
     @Override
     public void deleteBlast(String ownerId, String blastId)
     {
-        blastRepository.deleteById(UUID.fromString(blastId));
+        Blast existingBlast = blastRepository.findById(UUID.fromString(blastId)).orElse(null);
+        if (existingBlast == null)
+        {
+            logger.warn("Blast with ID {} does not exist.", blastId);
+            return;
+        }
+        blastRepository.delete(existingBlast);
         List<Blast> blasts = blastMap.get(ownerId);
-        blasts.removeIf(blast -> blast.getBlastId().equals(blastId));
+        blasts.removeIf(blast -> blast.getBlastId().equals(UUID.fromString(blastId)));
     }
 
     @Override
     public Blast updateBlast(Blast blastToUpdate)
     {
-        Blast result = blastRepository.save(blastToUpdate);
-        List<Blast> blasts = blastMap.get(result.getOwnerId());
-        blasts.removeIf(blast -> blast.getBlastId().equals(result.getBlastId()));
-        blasts.add(result);
-        return result;
+        Blast existingBlast = blastRepository.findById(blastToUpdate.getBlastId()).orElse(null);
+        if (existingBlast == null)
+        {
+            logger.warn("Blast with ID {} does not exist.", blastToUpdate.getBlastId().toString());
+            return blastToUpdate;
+        }
+        Blast updatedBlast = blastRepository.save(blastToUpdate);
+        List<Blast> blasts = blastMap.get(updatedBlast.getOwnerId());
+        blasts.removeIf(blast -> blast.getBlastId().equals(updatedBlast.getBlastId()));
+        blasts.add(updatedBlast);
+        return updatedBlast;
     }
 
     @Override

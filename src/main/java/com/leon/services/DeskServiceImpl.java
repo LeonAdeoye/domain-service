@@ -111,9 +111,7 @@ public class DeskServiceImpl implements DeskService
             logger.info("Deleted desk with ID: {}", deskId);
         }
         else
-        {
             logger.warn("Desk with ID {} not found for deletion.", deskId);
-        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.leon.services;
 
+import com.leon.models.Account;
 import com.leon.models.ClientInterest;
 import com.leon.repositories.ClientInterestRepository;
 import org.slf4j.Logger;
@@ -55,9 +56,16 @@ public class ClientInterestServiceImpl implements ClientInterestService
     @Override
     public void delete(String ownerId, String clientInterestId)
     {
-        clientInterestRepository.deleteById(UUID.fromString(clientInterestId));
+        ClientInterest existingClientInterest = clientInterestRepository.findById(UUID.fromString(clientInterestId)).orElse(null);
+        if (existingClientInterest == null)
+        {
+            logger.warn("Client Interest with ID {} does not exist.", clientInterestId);
+            return;
+        }
+        clientInterestRepository.delete(existingClientInterest);
         List<ClientInterest> interests = clientInterestMap.get(ownerId);
-        interests.removeIf(clientInterest -> clientInterest.getClientInterestId().equals(clientInterestId));
+        interests.removeIf(clientInterest -> clientInterest.getClientInterestId().equals(UUID.fromString(clientInterestId)));
+        logger.info("Deleted clientInterest with ID: {}", clientInterestId);
     }
 
     @Override
@@ -68,6 +76,7 @@ public class ClientInterestServiceImpl implements ClientInterestService
             clientInterestMap.put(result.getOwnerId(), new ArrayList<>());
         List<ClientInterest> interests = clientInterestMap.get(result.getOwnerId());
         interests.add(result);
+        logger.info("Successfully saved clientInterest: {}", clientInterestToSave);
         return result;
     }
 

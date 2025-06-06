@@ -1,5 +1,6 @@
 package com.leon.services;
 
+import com.leon.models.Blast;
 import com.leon.models.Client;
 import com.leon.repositories.ClientRepository;
 import org.slf4j.Logger;
@@ -39,8 +40,15 @@ public class ClientServiceImpl implements ClientService
     @Override
     public void delete(String clientId)
     {
-        clientRepository.deleteById(UUID.fromString(clientId));
+        Client existingClient = clientRepository.findById(UUID.fromString(clientId)).orElse(null);
+        if (existingClient == null)
+        {
+            logger.warn("Client with ID {} does not exist.", clientId);
+            return;
+        }
+        clientRepository.delete(existingClient);
         clientMap.remove(UUID.fromString(clientId));
+        logger.info("Deleted client with ID: {}", clientId);
     }
 
     @Override
@@ -52,8 +60,14 @@ public class ClientServiceImpl implements ClientService
     @Override
     public Client save(Client clientToSave)
     {
+        if (clientMap.containsKey(clientToSave.getClientId()))
+        {
+            logger.warn("Client with ID {} already exists. Not saving.", clientToSave.getClientId());
+            return clientToSave;
+        }
         Client result = clientRepository.save(clientToSave);
         clientMap.put(result.getClientId(), result);
+        logger.info("Saved client: {}", clientToSave);
         return result;
     }
 }
