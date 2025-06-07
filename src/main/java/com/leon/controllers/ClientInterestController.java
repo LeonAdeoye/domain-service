@@ -98,17 +98,8 @@ public class ClientInterestController
     @RequestMapping(method=POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity<ClientInterest> save(@RequestBody ClientInterest clientInterestToSave)
     {
-        if(clientInterestToSave == null)
-        {
-            logger.error("Received request to save client interest but client interest was null.");
+        if(!ClientInterest.isValidateClientInterest(clientInterestToSave))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if(clientInterestToSave.getClientInterestId() == null && clientInterestToSave.getClientInterestId().toString().isEmpty())
-        {
-            logger.error("Received request to save client interest but client interest Id was null or empty. Cannot save client interest without valid client interest Id.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
         logger.info("Received request to save interest: {}.", clientInterestToSave);
         ClientInterest savedClientInterest = this.clientInterestService.save(clientInterestToSave);
@@ -126,17 +117,8 @@ public class ClientInterestController
     @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
     public ResponseEntity<ClientInterest> update(@RequestBody ClientInterest clientInterestToUpdate)
     {
-        if(clientInterestToUpdate == null)
-        {
-            logger.error("Received request to update client interest but client interest was null.");
+        if(!ClientInterest.isValidateClientInterest(clientInterestToUpdate))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if(clientInterestToUpdate.getClientInterestId() == null || clientInterestToUpdate.getClientInterestId().toString().isEmpty())
-        {
-            logger.error("Received INVALID request to update client interest but client interest Id was null or empty. Cannot update client interest without valid client interest Id.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
         logger.info("Received request to update interest: {}.", clientInterestToUpdate);
         ClientInterest updatedClient = this.clientInterestService.update(clientInterestToUpdate);

@@ -1,8 +1,13 @@
 package com.leon.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,6 +15,7 @@ import java.util.UUID;
 @Document("Instrument")
 public class Instrument
 {
+    private static final Logger logger = LoggerFactory.getLogger(Instrument.class);
     @Id
     private UUID instrumentId;
     private String instrumentCode;
@@ -126,6 +132,37 @@ public class Instrument
 
     public void setExchangeAcronym(String exchangeAcronym) {
         this.exchangeAcronym = exchangeAcronym;
+    }
+
+    public static boolean isValidInstrument(Instrument instrument)
+    {
+        if (instrument == null || instrument.getInstrumentCode() == null || instrument.getInstrumentCode().isEmpty())
+        {
+            logger.error("Instrument is null or has an empty code. Invalid instrument.");
+            return false;
+        }
+        if (instrument.getInstrumentDescription() == null || instrument.getInstrumentDescription().isEmpty())
+        {
+            logger.error("Instrument description is null or empty. Invalid instrument.");
+            return false;
+        }
+        if (instrument.getAssetType() == null && instrument.getAssetType().toString().isEmpty())
+        {
+            logger.error("Asset type is null or empty. Invalid instrument.");
+            return false;
+        }
+        if(instrument.getExchangeAcronym() == null || instrument.getExchangeAcronym().isEmpty())
+        {
+            logger.error("Exchange acronym is null or empty. Invalid instrument.");
+            return false;
+        }
+
+        if (instrument.getSettlementCurrency() == null || instrument.getSettlementCurrency().toString().isEmpty())
+        {
+            logger.error("Settlement currency is null or empty. Invalid instrument.");
+            return false;
+        }
+        return true;
     }
 
     @Override

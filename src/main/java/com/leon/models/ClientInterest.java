@@ -1,6 +1,8 @@
 package com.leon.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Objects;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Document("ClientInterest")
 public class ClientInterest
 {
+    private static final Logger logger = LoggerFactory.getLogger(ClientInterest.class);
     @Id
     private UUID clientInterestId;
     private UUID clientId;
@@ -95,6 +98,41 @@ public class ClientInterest
     public void setOwnerId(String ownerId)
     {
         this.ownerId = ownerId;
+    }
+
+    public static boolean isValidateClientInterest(ClientInterest clientInterest)
+    {
+        if(clientInterest == null)
+        {
+            logger.error("ClientInterest is null. Invalid client interest.");
+            return false;
+        }
+        if(clientInterest.getClientId() == null || clientInterest.getClientId().toString().isEmpty())
+        {
+            logger.error("Client ID is null or empty. Invalid client interest.");
+            return false;
+        }
+        if(clientInterest.getOwnerId() == null || clientInterest.getOwnerId().isEmpty())
+        {
+            logger.error("Owner ID is null or empty. Invalid client interest.");
+            return false;
+        }
+        if(clientInterest.getSide() == null)
+        {
+            logger.error("Side is null. Invalid client interest.");
+            return false;
+        }
+        if(clientInterest.getInstrumentCode() == null || clientInterest.getInstrumentCode().isEmpty())
+        {
+            logger.error("Instrument code is null or empty. Invalid client interest.");
+            return false;
+        }
+        if(clientInterest.getClientInterestId() == null || clientInterest.getClientInterestId().toString().isEmpty())
+        {
+            logger.error("Client interest ID is null or empty. Invalid client interest.");
+            return false;
+        }
+        return true;
     }
 
     @Override

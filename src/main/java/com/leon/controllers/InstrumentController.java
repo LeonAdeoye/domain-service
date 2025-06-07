@@ -40,35 +40,8 @@ public class InstrumentController
     @RequestMapping(method=POST , consumes = "application/json"  ,produces = "application/json")
     public ResponseEntity<Instrument> createInstrument(@RequestBody Instrument instrument)
     {
-        if (instrument == null || instrument.getInstrumentCode() == null || instrument.getInstrumentCode().isEmpty())
-        {
-            logger.error("Attempted to create an instrument with null or empty code.");
+        if(!Instrument.isValidInstrument(instrument))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (instrument.getInstrumentDescription() == null || instrument.getInstrumentDescription().isEmpty())
-        {
-            logger.error("Attempted to create an instrument with null or empty name.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (instrument.getAssetType() == null && instrument.getAssetType().toString().isEmpty())
-        {
-            logger.error("Attempted to create an instrument with null or empty asset type.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if(instrument.getExchangeAcronym() == null || instrument.getExchangeAcronym().isEmpty())
-        {
-            logger.error("Attempted to create an instrument with null or empty exchange.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (instrument.getSettlementCurrency() == null || instrument.getSettlementCurrency().toString().isEmpty())
-        {
-            logger.error("Attempted to create an instrument with null or empty currency.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
         logger.info("Received request to create instrument: {}", instrument);
         Instrument createdInstrument = instrumentService.createInstrument(instrument);
