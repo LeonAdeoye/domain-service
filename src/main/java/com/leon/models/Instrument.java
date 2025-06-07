@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -134,7 +132,7 @@ public class Instrument
         this.exchangeAcronym = exchangeAcronym;
     }
 
-    public static boolean isValidInstrument(Instrument instrument)
+    public static boolean isValid(Instrument instrument)
     {
         if (instrument == null || instrument.getInstrumentCode() == null || instrument.getInstrumentCode().isEmpty())
         {

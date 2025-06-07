@@ -98,7 +98,7 @@ public class ClientInterestController
     @RequestMapping(method=POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity<ClientInterest> save(@RequestBody ClientInterest clientInterestToSave)
     {
-        if(!ClientInterest.isValidateClientInterest(clientInterestToSave))
+        if(!ClientInterest.isValid(clientInterestToSave))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         logger.info("Received request to save interest: {}.", clientInterestToSave);
@@ -117,7 +117,7 @@ public class ClientInterestController
     @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
     public ResponseEntity<ClientInterest> update(@RequestBody ClientInterest clientInterestToUpdate)
     {
-        if(!ClientInterest.isValidateClientInterest(clientInterestToUpdate))
+        if(!ClientInterest.isValid(clientInterestToUpdate))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         logger.info("Received request to update interest: {}.", clientInterestToUpdate);

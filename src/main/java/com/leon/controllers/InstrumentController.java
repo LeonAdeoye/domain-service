@@ -40,7 +40,7 @@ public class InstrumentController
     @RequestMapping(method=POST , consumes = "application/json"  ,produces = "application/json")
     public ResponseEntity<Instrument> createInstrument(@RequestBody Instrument instrument)
     {
-        if(!Instrument.isValidInstrument(instrument))
+        if(!Instrument.isValid(instrument))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         logger.info("Received request to create instrument: {}", instrument);

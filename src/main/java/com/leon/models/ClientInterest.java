@@ -100,7 +100,7 @@ public class ClientInterest
         this.ownerId = ownerId;
     }
 
-    public static boolean isValidateClientInterest(ClientInterest clientInterest)
+    public static boolean isValid(ClientInterest clientInterest)
     {
         if(clientInterest == null)
         {
