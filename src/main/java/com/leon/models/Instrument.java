@@ -24,6 +24,7 @@ public class Instrument
     private Currency settlementCurrency;
     private SettlementType settlementType;
     private String exchangeAcronym;
+    private int lotSize;
 
 
     public Instrument()
@@ -37,6 +38,7 @@ public class Instrument
         settlementCurrency = Currency.HKD;
         settlementType = SettlementType.T_PLUS_ONE;
         exchangeAcronym = "HKSE";
+        lotSize = 100;
     }
 
     public Instrument(String instrumentCode, String instrumentDescription, AssetType assetType, String blgCode, String ric, Currency settlementCurrency, SettlementType settlementType, String exchangeAcronym)
@@ -50,6 +52,7 @@ public class Instrument
         this.settlementType = settlementType;
         this.instrumentId = UUID.randomUUID();
         this.exchangeAcronym = exchangeAcronym;
+        this.lotSize = 100;
     }
 
     public String getInstrumentCode()
@@ -132,6 +135,14 @@ public class Instrument
         this.exchangeAcronym = exchangeAcronym;
     }
 
+    public int getLotSize() {
+        return lotSize;
+    }
+
+    public void setLotSize(int lotSize) {
+        this.lotSize = lotSize;
+    }
+
     public static boolean isValid(Instrument instrument)
     {
         if (instrument == null || instrument.getInstrumentCode() == null || instrument.getInstrumentCode().isEmpty())
@@ -160,6 +171,12 @@ public class Instrument
             logger.error("Settlement currency is null or empty. Invalid instrument.");
             return false;
         }
+        if(instrument.lotSize <= 0)
+        {
+            logger.error("Lot size must be greater than zero. Invalid instrument.");
+            return false;
+        }
+
         return true;
     }
 
@@ -176,6 +193,7 @@ public class Instrument
                 ", settlementType=" + settlementType +
                 ", instrumentId=" + instrumentId +
                 ", exchangeAcronym='" + exchangeAcronym + '\'' +
+                ", lotSize=" + lotSize +
                 '}';
     }
 
@@ -187,12 +205,12 @@ public class Instrument
         return getInstrumentId().equals(that.getInstrumentId()) && getInstrumentCode().equals(that.getInstrumentCode())
                 && getInstrumentDescription().equals(that.getInstrumentDescription()) && getAssetType() == that.getAssetType()
                 && Objects.equals(getBlgCode(), that.getBlgCode()) && Objects.equals(getRic(), that.getRic()) && getSettlementCurrency() == that.getSettlementCurrency()
-                && getSettlementType() == that.getSettlementType() && Objects.equals(getExchangeAcronym(), that.getExchangeAcronym());
+                && getSettlementType() == that.getSettlementType() && Objects.equals(getExchangeAcronym(), that.getExchangeAcronym()) && getLotSize() == that.getLotSize();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getInstrumentId(), getInstrumentCode(), getInstrumentDescription(),
+        return Objects.hash(getInstrumentId(), getInstrumentCode(), getInstrumentDescription(), getLotSize(),
                 getAssetType(), getBlgCode(), getRic(), getSettlementCurrency(), getSettlementType(), getExchangeAcronym());
     }
 }
