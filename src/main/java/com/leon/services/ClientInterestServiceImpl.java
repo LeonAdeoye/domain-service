@@ -50,7 +50,7 @@ public class ClientInterestServiceImpl implements ClientInterestService
     public List<ClientInterest> getAllByClientId(String ownerId, String clientId)
     {
         List<ClientInterest> interests = clientInterestMap.get(ownerId);
-        return interests.stream().filter(clientInterest -> clientInterest.getClientId().equals(clientId)).collect(Collectors.toList());
+        return interests.stream().filter(clientInterest -> clientInterest.getClientId().equals(UUID.fromString(clientId))).collect(Collectors.toList());
     }
 
     @Override

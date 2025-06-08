@@ -38,13 +38,16 @@ public class AccountController
 
     @CrossOrigin
     @RequestMapping(method=POST , consumes = "application/json"  ,produces = "application/json")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        if (account == null || account.getAccountId() == null || account.getAccountId().toString().isEmpty()) {
+    public ResponseEntity<Account> createAccount(@RequestBody Account account)
+    {
+        if (account == null || account.getAccountId() == null || account.getAccountId().toString().isEmpty())
+        {
             logger.error("Attempted to create an account with null or empty ID.");
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(account.getAccountName() == null || account.getAccountName().isEmpty()) {
+        if(account.getAccountName() == null || account.getAccountName().isEmpty())
+        {
             logger.error("Attempted to create an account with null or empty name.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -56,13 +59,16 @@ public class AccountController
 
     @CrossOrigin
     @RequestMapping(method = PUT, consumes = "application/json"  ,produces = "application/json")
-    public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
-        if (account == null || account.getAccountId() == null || account.getAccountId().toString().isEmpty()) {
+    public ResponseEntity<Account> updateAccount(@RequestBody Account account)
+    {
+        if (account == null || account.getAccountId() == null || account.getAccountId().toString().isEmpty())
+        {
             logger.error("Attempted to update an account with null or empty ID.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(account.getAccountName() == null || account.getAccountName().isEmpty()) {
+        if(account.getAccountName() == null || account.getAccountName().isEmpty())
+        {
             logger.error("Attempted to update an account with null or empty name.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -74,7 +80,14 @@ public class AccountController
 
     @CrossOrigin
     @RequestMapping(value = "/{accountId}", method = DELETE)
-    public ResponseEntity<Void> deleteAccount(@PathVariable String accountId) {
+    public ResponseEntity<Void> deleteAccount(@PathVariable String accountId)
+    {
+        if (accountId == null || accountId.isEmpty())
+        {
+            logger.error("Attempted to delete an account with null or empty ID.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         logger.info("Received request to delete account with ID: {}", accountId);
         accountService.deleteAccount(accountId);
         return ResponseEntity.noContent().build();

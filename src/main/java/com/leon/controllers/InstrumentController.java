@@ -50,16 +50,16 @@ public class InstrumentController
 
     @CrossOrigin
     @RequestMapping(value = "/{instrumentId}", method = DELETE)
-    public ResponseEntity<Void> deleteInstrument(@PathVariable String instrumentCode)
+    public ResponseEntity<Void> deleteInstrument(@PathVariable String instrumentId)
     {
-        if (instrumentCode == null || instrumentCode.isEmpty())
+        if (instrumentId == null || instrumentId.isEmpty())
         {
-            logger.error("Received request to delete instrument but instrument code was null or empty.");
+            logger.error("Received request to delete instrument but instrument id was null or empty.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        logger.info("Received request to delete instrument with code: {}", instrumentCode);
-        instrumentService.deleteInstrument(instrumentCode);
+        logger.info("Received request to delete instrument with ID: {}", instrumentId);
+        instrumentService.deleteInstrument(instrumentId);
         return ResponseEntity.noContent().build();
     }
 }

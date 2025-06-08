@@ -10,7 +10,7 @@ import java.util.*;
 @Document("Blast")
 public class Blast
 {
-    enum ContentType
+    public enum ContentType
     {
         IOIs,
         NEWS,

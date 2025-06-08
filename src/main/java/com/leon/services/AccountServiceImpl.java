@@ -77,10 +77,10 @@ public class AccountServiceImpl  implements AccountService
             logger.warn("Account with ID {} does not exist. Not updating.", account.getAccountId());
             return null;
         }
-        accountRepository.save(account);
+        Account updatedAccount = accountRepository.save(account);
         accounts.removeIf(a -> a.getAccountId().equals(existingAccount.getAccountId()));
-        accounts.add(account);
-        logger.info("Updated account with ID: {}", existingAccount.getAccountId());
-        return existingAccount;
+        accounts.add(updatedAccount);
+        logger.info("Updated account with ID: {}", updatedAccount.getAccountId());
+        return  updatedAccount;
     }
 }

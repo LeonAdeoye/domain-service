@@ -33,6 +33,7 @@ public class ClientInterest
 
     public ClientInterest(String ownerId, UUID clientId, String notes, Side side, String stockCode)
     {
+        this.clientInterestId = UUID.randomUUID();
         this.clientId = clientId;
         this.ownerId = ownerId;
         this.notes = notes;

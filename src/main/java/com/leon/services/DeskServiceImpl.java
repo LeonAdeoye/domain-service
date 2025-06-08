@@ -144,7 +144,7 @@ public class DeskServiceImpl implements DeskService
         if (deskOptional.isPresent())
         {
             Desk desk = deskOptional.get();
-            if (desk.getTraders().remove(traderId))
+            if (desk.getTraders().remove(UUID.fromString(traderId)))
             {
                 deskRepository.save(desk);
                 logger.info("Removed trader {} from desk with ID: {}", traderId, deskId);

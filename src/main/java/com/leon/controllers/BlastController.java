@@ -44,6 +44,18 @@ public class BlastController
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        if(blastToSave.getOwnerId() == null || blastToSave.getOwnerId().isEmpty())
+        {
+            logger.error("Received INVALID request to save blast but owner Id was null or empty. Cannot save blast without owner Id.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(blastToSave.getBlastName() == null || blastToSave.getBlastName().isEmpty())
+        {
+            logger.error("Received INVALID request to save blast but blast name was null or empty. Cannot save blast without blast name.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         logger.info("Received request to save blast: {}.", blastToSave);
         Blast savedBlast = this.blastService.saveBlast(blastToSave);
 
@@ -53,7 +65,7 @@ public class BlastController
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(savedBlast, HttpStatus.OK);
+        return new ResponseEntity<>(savedBlast, HttpStatus.CREATED);
     }
 
     @CrossOrigin
@@ -90,6 +102,18 @@ public class BlastController
         if(blastToUpdate.getBlastId() == null || blastToUpdate.getBlastId().toString().isEmpty())
         {
             logger.error("Received INVALID request to update blast but blast Id was null or empty. Cannot update blast without blast Id.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(blastToUpdate.getOwnerId() == null || blastToUpdate.getOwnerId().isEmpty())
+        {
+            logger.error("Received INVALID request to update blast but owner Id was null or empty. Cannot update blast without owner Id.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(blastToUpdate.getBlastName() == null || blastToUpdate.getBlastName().isEmpty())
+        {
+            logger.error("Received INVALID request to update blast but blast name was null or empty. Cannot update blast without blast name.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

@@ -6,6 +6,7 @@ import com.leon.services.DeskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -96,7 +97,7 @@ public class DeskController
 
             logger.info("Received request to create a new desk.");
             Desk createdDesk = deskService.createDesk(desk);
-            return ResponseEntity.ok(createdDesk);
+            return new ResponseEntity<>(createdDesk, HttpStatus.CREATED);
         }
 
         @CrossOrigin
@@ -106,6 +107,12 @@ public class DeskController
             if (desk == null || desk.getDeskId() == null || desk.getDeskId().toString().isEmpty())
             {
                 logger.error("Attempted to update a desk with null or empty ID.");
+                return ResponseEntity.badRequest().build();
+            }
+
+            if (desk.getDeskName() == null || desk.getDeskName().isEmpty())
+            {
+                logger.error("Attempted to update a desk with null or empty name.");
                 return ResponseEntity.badRequest().build();
             }
 

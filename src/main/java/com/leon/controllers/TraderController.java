@@ -5,6 +5,7 @@ import com.leon.services.TraderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -38,7 +39,7 @@ public class TraderController
 
     @CrossOrigin
     @RequestMapping(method=DELETE)
-    public ResponseEntity<Void> deleteTrader(String traderId)
+    public ResponseEntity<Void> deleteTrader(@RequestParam String traderId)
     {
         if(traderId == null || traderId.isEmpty())
         {
@@ -62,7 +63,7 @@ public class TraderController
 
     @CrossOrigin
     @RequestMapping(value="/{traderId}", method=GET, produces = "application/json")
-    public ResponseEntity<Trader> getTraderById(String traderId)
+    public ResponseEntity<Trader> getTraderById(@PathVariable String traderId)
     {
         if (traderId == null || traderId.isEmpty())
         {
@@ -109,7 +110,7 @@ public class TraderController
 
         logger.info("Creating new trader.");
         Trader createdTrader = traderService.createTrader(trader);
-        return ResponseEntity.ok(createdTrader);
+        return new ResponseEntity<>(createdTrader, HttpStatus.CREATED);
     }
 
     @CrossOrigin
@@ -122,11 +123,26 @@ public class TraderController
             return ResponseEntity.badRequest().build();
         }
 
+        if (trader.getFirstName() == null || trader.getFirstName().isEmpty())
+        {
+            logger.error("Attempted to update a trader with null or empty first name.");
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (trader.getLastName() == null || trader.getLastName().isEmpty())
+        {
+            logger.error("Attempted to update a trader with null or empty last name.");
+            return ResponseEntity.badRequest().build();
+        }
+
         logger.info("Updating trader with ID: {}", trader.getTraderId());
         Trader updatedTrader = traderService.updateTrader(trader);
-        if (updatedTrader != null) {
+        if (updatedTrader != null)
+        {
             return ResponseEntity.ok(updatedTrader);
-        } else {
+        }
+        else
+        {
             logger.warn("Trader with ID {} not found. Cannot update.", trader.getTraderId());
             return ResponseEntity.notFound().build();
         }
