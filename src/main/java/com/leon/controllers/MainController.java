@@ -39,6 +39,9 @@ public class MainController
     @Autowired
     private ExchangeService exchangeService;
 
+    @Autowired
+    private BrokerService brokerService;
+
     @RequestMapping("/heartbeat")
     public ResponseEntity<String> heartBeat()
     {
@@ -61,6 +64,8 @@ public class MainController
         this.deskService.reconfigure();
         this.traderService.reconfigure();
         this.exchangeService.reconfigure();
+        this.brokerService.reconfigure();
+
         logger.info("Reconfiguration completed successfully.");
         return ResponseEntity.noContent().build();
     }
