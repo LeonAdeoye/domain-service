@@ -56,6 +56,23 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     @Override
+    public Exchange updateExchange(Exchange exchangeToUpdate)
+    {
+        Exchange existingExchange = exchangeRepository.findById(exchangeToUpdate.getExchangeId()).orElse(null);
+        if (existingExchange == null)
+        {
+            logger.warn("Exchange with ID {} does not exist. Cannot update.", exchangeToUpdate.getExchangeId());
+            return null;
+        }
+
+        Exchange updatedExchange = exchangeRepository.save(exchangeToUpdate);
+        exchanges.removeIf(exchange -> exchange.getExchangeId().equals(existingExchange.getExchangeId()));
+        exchanges.add(updatedExchange);
+        logger.info("Updated exchange: {}", updatedExchange);
+        return updatedExchange;
+    }
+
+    @Override
     public void deleteExchange(String exchangeId)
     {
         Exchange exchangeToDelete = exchangeRepository.findById(UUID.fromString(exchangeId)).orElse(null);

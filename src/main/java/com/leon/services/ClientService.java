@@ -13,4 +13,6 @@ public interface ClientService
     List<Client> getAll();
 
     Client save(Client clientToSave);
+
+    Client update(Client clientToUpdate);
 }

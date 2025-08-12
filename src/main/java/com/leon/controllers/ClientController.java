@@ -72,6 +72,34 @@ public class ClientController
     }
 
     @CrossOrigin
+    @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Client> update(@RequestBody Client clientToUpdate)
+    {
+        if(clientToUpdate == null)
+        {
+            logger.error("Received request to update client but client was null.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(clientToUpdate.getClientId() == null || clientToUpdate.getClientId().toString().isEmpty())
+        {
+            logger.error("Received request to update client but client ID was null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Received request to update client: {}.", clientToUpdate.toString());
+        Client updatedClient = this.clientService.update(clientToUpdate);
+        
+        if (updatedClient == null)
+        {
+            logger.warn("Client with ID {} not found. Cannot update.", clientToUpdate.getClientId());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(updatedClient, HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @RequestMapping(method=GET, produces = "application/json")
     public ResponseEntity<List<Client>> getAll()
     {

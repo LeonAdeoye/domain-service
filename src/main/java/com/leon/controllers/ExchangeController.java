@@ -58,6 +58,34 @@ public class ExchangeController
     }
 
     @CrossOrigin
+    @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Exchange> updateExchange(@RequestBody Exchange exchange)
+    {
+        if (exchange == null || exchange.getExchangeId() == null || exchange.getExchangeId().toString().isEmpty())
+        {
+            logger.error("Attempted to update an exchange with null or empty ID.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(exchange.getExchangeName() == null || exchange.getExchangeName().isEmpty())
+        {
+            logger.error("Attempted to update an exchange with null or empty name.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        logger.info("Received request to update exchange: {}", exchange);
+        Exchange updatedExchange = exchangeService.updateExchange(exchange);
+        
+        if (updatedExchange == null)
+        {
+            logger.warn("Exchange with ID {} not found. Cannot update.", exchange.getExchangeId());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(updatedExchange, HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/{exchangeId}", method = DELETE)
     public ResponseEntity<Void> deleteExchange(@PathVariable String exchangeId)
     {

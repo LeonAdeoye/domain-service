@@ -10,6 +10,8 @@ public interface ExchangeService
 
     Exchange createExchange(Exchange exchange);
 
+    Exchange updateExchange(Exchange exchange);
+
     void deleteExchange(String exchangeId);
 }
 

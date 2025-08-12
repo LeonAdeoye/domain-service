@@ -1,6 +1,5 @@
 package com.leon.services;
 
-import com.leon.models.Blast;
 import com.leon.models.Client;
 import com.leon.repositories.ClientRepository;
 import org.slf4j.Logger;
@@ -68,6 +67,21 @@ public class ClientServiceImpl implements ClientService
         Client result = clientRepository.save(clientToSave);
         clientMap.put(result.getClientId(), result);
         logger.info("Saved client: {}", clientToSave);
+        return result;
+    }
+
+    @Override
+    public Client update(Client clientToUpdate)
+    {
+        if (!clientMap.containsKey(clientToUpdate.getClientId()))
+        {
+            logger.warn("Client with ID {} does not exist. Cannot update.", clientToUpdate.getClientId());
+            return null;
+        }
+        
+        Client result = clientRepository.save(clientToUpdate);
+        clientMap.put(result.getClientId(), result);
+        logger.info("Updated client: {}", clientToUpdate);
         return result;
     }
 }

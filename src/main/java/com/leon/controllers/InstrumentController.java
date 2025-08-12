@@ -49,6 +49,25 @@ public class InstrumentController
     }
 
     @CrossOrigin
+    @RequestMapping(method=PUT, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Instrument> updateInstrument(@RequestBody Instrument instrument)
+    {
+        if(!Instrument.isValid(instrument))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        logger.info("Received request to update instrument: {}", instrument);
+        Instrument updatedInstrument = instrumentService.updateInstrument(instrument);
+        
+        if (updatedInstrument == null)
+        {
+            logger.warn("Instrument with ID {} not found. Cannot update.", instrument.getInstrumentId());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(updatedInstrument, HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/{instrumentId}", method = DELETE)
     public ResponseEntity<Void> deleteInstrument(@PathVariable String instrumentId)
     {
