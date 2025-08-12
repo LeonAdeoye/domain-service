@@ -1,9 +1,17 @@
 package com.leon.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Objects;
 import java.util.UUID;
 
-public class Broker {
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Document("Broker")
+public class Broker
+{
+    @Id
     UUID brokerId;
     String brokerAcronym;
     String brokerDescription;
