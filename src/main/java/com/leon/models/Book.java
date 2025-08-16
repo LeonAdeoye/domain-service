@@ -8,7 +8,6 @@ import java.util.Objects;
 public class Book
 {
     @Id
-    private String id;
     private String bookId;
     private String bookCode;
     private String bookName;
@@ -31,16 +30,6 @@ public class Book
         this.bookCode = bookCode;
         this.bookName = bookName;
         this.deskId = deskId;
-    }
-
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
     }
 
     public String getBookId()
@@ -98,21 +87,19 @@ public class Book
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return Objects.equals(id, book.id) && Objects.equals(bookId, book.bookId);
+        return Objects.equals(bookId, book.bookId);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, bookId);
+        return Objects.hash(bookId);
     }
 
     @Override
     public String toString()
     {
-        return "Book{" +
-                "id='" + id + '\'' +
-                ", bookId='" + bookId + '\'' +
+        return "Book{ bookId='" + bookId + '\'' +
                 ", bookCode='" + bookCode + '\'' +
                 ", bookName='" + bookName + '\'' +
                 ", deskId='" + deskId + '\'' +
