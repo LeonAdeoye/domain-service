@@ -25,6 +25,8 @@ public class Instrument
     private SettlementType settlementType;
     private String exchangeAcronym;
     private int lotSize;
+    private String country;
+    private String sector;
 
 
     public Instrument()
@@ -39,6 +41,8 @@ public class Instrument
         settlementType = SettlementType.T_PLUS_ONE;
         exchangeAcronym = "HKSE";
         lotSize = 100;
+        country = "";
+        sector = "";
     }
 
     public Instrument(String instrumentCode, String instrumentDescription, AssetType assetType, String blgCode, String ric, Currency settlementCurrency, SettlementType settlementType, String exchangeAcronym)
@@ -53,6 +57,8 @@ public class Instrument
         this.instrumentId = UUID.randomUUID();
         this.exchangeAcronym = exchangeAcronym;
         this.lotSize = 100;
+        this.country = "";
+        this.sector = "";
     }
 
     public String getInstrumentCode()
@@ -143,6 +149,22 @@ public class Instrument
         this.lotSize = lotSize;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
     public static boolean isValid(Instrument instrument)
     {
         if (instrument == null || instrument.getInstrumentCode() == null || instrument.getInstrumentCode().isEmpty())
@@ -194,6 +216,8 @@ public class Instrument
                 ", instrumentId=" + instrumentId +
                 ", exchangeAcronym='" + exchangeAcronym + '\'' +
                 ", lotSize=" + lotSize +
+                ", country='" + country + '\'' +
+                ", sector='" + sector + '\'' +
                 '}';
     }
 
@@ -205,12 +229,14 @@ public class Instrument
         return getInstrumentId().equals(that.getInstrumentId()) && getInstrumentCode().equals(that.getInstrumentCode())
                 && getInstrumentDescription().equals(that.getInstrumentDescription()) && getAssetType() == that.getAssetType()
                 && Objects.equals(getBlgCode(), that.getBlgCode()) && Objects.equals(getRic(), that.getRic()) && getSettlementCurrency() == that.getSettlementCurrency()
-                && getSettlementType() == that.getSettlementType() && Objects.equals(getExchangeAcronym(), that.getExchangeAcronym()) && getLotSize() == that.getLotSize();
+                && getSettlementType() == that.getSettlementType() && Objects.equals(getExchangeAcronym(), that.getExchangeAcronym()) && getLotSize() == that.getLotSize()
+                && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getSector(), that.getSector());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getInstrumentId(), getInstrumentCode(), getInstrumentDescription(), getLotSize(),
-                getAssetType(), getBlgCode(), getRic(), getSettlementCurrency(), getSettlementType(), getExchangeAcronym());
+                getAssetType(), getBlgCode(), getRic(), getSettlementCurrency(), getSettlementType(), getExchangeAcronym(),
+                getCountry(), getSector());
     }
 }
