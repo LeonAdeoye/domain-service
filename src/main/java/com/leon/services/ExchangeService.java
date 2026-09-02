@@ -13,5 +13,7 @@ public interface ExchangeService
     Exchange updateExchange(Exchange exchange);
 
     void deleteExchange(String exchangeId);
+
+    Exchange getByAcronym(String exchangeAcronym);
 }
 

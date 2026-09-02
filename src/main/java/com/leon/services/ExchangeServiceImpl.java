@@ -27,9 +27,86 @@ public class ExchangeServiceImpl implements ExchangeService {
     @PostConstruct
     public void initialize()
     {
+        exchanges.clear();
         List<Exchange> result = exchangeRepository.findAll();
         exchanges.addAll(result);
         logger.info("Loaded exchange service with {} exchange(s).", result.size());
+        seedSessionHours();
+    }
+
+    private void seedSessionHours()
+    {
+        seedExisting("HKSE", "Asia/Hong_Kong", "09:30", "16:00", "12:00", "13:00", "HKD");
+        seedExisting("TSE", "Asia/Tokyo", "09:00", "15:00", "11:30", "12:30", "JPY");
+        seedExisting("LSE", "Europe/London", "08:00", "16:30", "", "", "GBP");
+        seedExisting("NYSE", "America/New_York", "09:30", "16:00", "", "", "USD");
+        seedOrCreate("OSE", "Osaka Stock Exchange", "Asia/Tokyo", "09:00", "15:00", "11:30", "12:30", "JPY");
+    }
+
+    private void seedExisting(String acronym, String timezone, String openTime, String closeTime, String lunchStart, String lunchEnd, String currency)
+    {
+        Exchange exchange = findByAcronym(acronym);
+        if (exchange == null)
+        {
+            logger.warn("Exchange {} not found; skipping session-hour seed", acronym);
+            return;
+        }
+
+        if (hasSessionHours(exchange))
+            return;
+
+        applySessionHours(exchange, timezone, openTime, closeTime, lunchStart, lunchEnd, currency);
+        Exchange saved = exchangeRepository.save(exchange);
+        replaceInCache(saved);
+        logger.info("Seeded session hours for {}", acronym);
+    }
+
+    private void seedOrCreate(String acronym, String exchangeName, String timezone, String openTime, String closeTime, String lunchStart, String lunchEnd, String currency)
+    {
+        Exchange exchange = findByAcronym(acronym);
+        if (exchange == null)
+        {
+            Exchange created = new Exchange();
+            created.setExchangeName(exchangeName);
+            created.setExchangeAcronym(acronym);
+            applySessionHours(created, timezone, openTime, closeTime, lunchStart, lunchEnd, currency);
+            Exchange saved = exchangeRepository.save(created);
+            exchanges.add(saved);
+            logger.info("Created exchange {} with session hours", acronym);
+            return;
+        }
+
+        seedExisting(acronym, timezone, openTime, closeTime, lunchStart, lunchEnd, currency);
+    }
+
+    private Exchange findByAcronym(String acronym)
+    {
+        return exchanges.stream()
+                .filter(exchange -> acronym.equalsIgnoreCase(exchange.getExchangeAcronym()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private boolean hasSessionHours(Exchange exchange)
+    {
+        return exchange.getOpenTime() != null && !exchange.getOpenTime().isBlank()
+                && exchange.getCloseTime() != null && !exchange.getCloseTime().isBlank();
+    }
+
+    private void applySessionHours(Exchange exchange, String timezone, String openTime, String closeTime, String lunchStart, String lunchEnd, String currency)
+    {
+        exchange.setTimezone(timezone);
+        exchange.setOpenTime(openTime);
+        exchange.setCloseTime(closeTime);
+        exchange.setLunchStart(lunchStart);
+        exchange.setLunchEnd(lunchEnd);
+        exchange.setCurrency(currency);
+    }
+
+    private void replaceInCache(Exchange updated)
+    {
+        exchanges.removeIf(exchange -> exchange.getExchangeId().equals(updated.getExchangeId()));
+        exchanges.add(updated);
     }
 
     @Override
@@ -84,5 +161,17 @@ public class ExchangeServiceImpl implements ExchangeService {
         }
         else
             logger.warn("Attempted to delete non-existing exchange with ID: {}", exchangeId);
+    }
+
+    @Override
+    public Exchange getByAcronym(String exchangeAcronym)
+    {
+        if (exchangeAcronym == null || exchangeAcronym.isBlank())
+            return null;
+
+        return exchanges.stream()
+                .filter(exchange -> exchangeAcronym.equalsIgnoreCase(exchange.getExchangeAcronym()))
+                .findFirst()
+                .orElseGet(() -> exchangeRepository.findByExchangeAcronymIgnoreCase(exchangeAcronym));
     }
 }

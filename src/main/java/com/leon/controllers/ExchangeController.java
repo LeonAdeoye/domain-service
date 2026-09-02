@@ -86,6 +86,21 @@ public class ExchangeController
     }
 
     @CrossOrigin
+    @RequestMapping(value = "/acronym/{exchangeAcronym}", method = GET, produces = "application/json")
+    public ResponseEntity<Exchange> getByAcronym(@PathVariable String exchangeAcronym)
+    {
+        logger.info("Received request to get exchange by acronym: {}", exchangeAcronym);
+        Exchange exchange = exchangeService.getByAcronym(exchangeAcronym);
+        if (exchange == null)
+        {
+            logger.warn("Exchange with acronym {} not found.", exchangeAcronym);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(exchange, HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/{exchangeId}", method = DELETE)
     public ResponseEntity<Void> deleteExchange(@PathVariable String exchangeId)
     {
