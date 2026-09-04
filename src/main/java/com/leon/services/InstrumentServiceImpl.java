@@ -42,11 +42,16 @@ public class InstrumentServiceImpl implements InstrumentService
     @Override
     public Instrument createInstrument(Instrument instrument)
     {
-        Instrument existingInstrument = instrumentRepository.findById(instrument.getInstrumentId()).orElse(null);
-        if (existingInstrument != null)
+        if (instrument.getInstrumentId() == null)
+            instrument.setInstrumentId(UUID.randomUUID());
+        else
         {
-            logger.warn("Instrument {} already exists. Not creating a new one.", instrument);
-            return existingInstrument;
+            Instrument existingInstrument = instrumentRepository.findById(instrument.getInstrumentId()).orElse(null);
+            if (existingInstrument != null)
+            {
+                logger.warn("Instrument {} already exists. Not creating a new one.", instrument);
+                return existingInstrument;
+            }
         }
 
         Instrument createdInstrument = instrumentRepository.save(instrument);
